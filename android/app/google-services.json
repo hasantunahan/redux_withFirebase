@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "926170197189",
+    "project_id": "firestoreexam-bb7d6",
+    "storage_bucket": "firestoreexam-bb7d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926170197189:android:a36bfa033f31ba835f14ac",
+        "android_client_info": {
+          "package_name": "com.firestoreexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926170197189-2pb6s4qcthjv178b5esmniciltiisnb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA11wNnNUz2DEuVOmNJrwhUas4wO7nhqqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926170197189-2pb6s4qcthjv178b5esmniciltiisnb0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
