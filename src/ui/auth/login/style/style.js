@@ -35,4 +35,24 @@ export const LoginStyle = (color) =>
       borderColor : color.border,
       color : color.text
     },
+    login : {
+      alignItems: 'center',
+      marginVertical: 12,
+      backgroundColor: colors.primary,
+      padding: 8,
+      borderRadius: 3,
+  },
+  google :{
+    alignItems: 'center',
+    marginVertical: 12,
+    backgroundColor: colors.change,
+    padding: 8,
+    borderRadius: 3
+},
+textwithimage : {
+  flexDirection: 'row',
+  alignItems: 'center',
+  width: '100%',
+  justifyContent: 'center',
+}
   });

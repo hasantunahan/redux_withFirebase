@@ -7,7 +7,11 @@ export const lightTheme = {
         text: '#252525',
         border: '#7E7E7E',
         notification: '#F04E84',
-        change: '#FFFFFF'
+        change: '#FFFFFF',
+        error : '#cf000f',
+        success :'#009944',
+        warning :'	#f0541e',
+        info : '#63c0df'
     },
     statusbar: 'dark-content'
 };
@@ -21,7 +25,11 @@ export const darkTheme = {
         text: '#ffefff',
         border: '#73819E',
         notification: '#9E234C',
-        change: '#252525'
+        change: '#252525',
+        error : '#cf000f',
+        success :'#009944',
+        warning :'	#f0541e',
+        info : '#63c0df'
     },
     statusbar: 'light-content'
 };
