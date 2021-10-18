@@ -144,7 +144,7 @@ const LoginScreen = props => {
                 style={styles.input}
                 value={email}
                 onChangeText={val=> setEmail(val)}
-                placeholder="enter username"
+                placeholder="enter email"
                 keyboardType="email-address"
                 placeholderTextColor={colors.border}
             />

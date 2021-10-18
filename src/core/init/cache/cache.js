@@ -9,13 +9,39 @@ export async function sharedPref(method, key, val) {
     } catch (e) {
       return { err: e }
     }
-  } else {
+  } else if (CacheEnum.Set) {
     try {
       const jsonValue = JSON.stringify(val);
       await AsyncStorage.setItem(key, jsonValue)
-      return {err : null}
+      return { err: null }
     } catch (e) {
       return { err: e }
     }
+  } else if (CacheEnum.Remove) {
+    try {
+      await AsyncStorage.removeItem(key)
+    } catch (e) {
+      return { err: e }
+    }
+  }
+}
+
+export async function sharedGetAllKey() {
+  let keys = []
+  try {
+    keys = await AsyncStorage.getAllKeys()
+    return keys
+  } catch (e) {
+    return { err: e }
+
+  }
+}
+
+export async function sharedClearAll(){
+  try {
+    await AsyncStorage.clear()
+    return true
+  } catch(e) {
+    return false
   }
 }

@@ -10,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import TouchableScale from 'react-native-touchable-scale';
 import { APPLICATION_CONSTANT } from '../../../core/constant/app/applicationconstant';
 import AppButtonOnlyText from '../../../core/components/button';
+import CustomSnackBar from '../../_partial/snackbar/snackbar';
 
 const RegisterScreen = (props) => {
   const [snackbar, setSnackbar] = React.useState({
@@ -49,6 +50,8 @@ const RegisterScreen = (props) => {
           {renderHaveAccunt()}
         </View>
       </ScrollView>
+      <CustomSnackBar text={snackbar.message} backgroundColor={snackbar.color} isDismiss={snackbar.visible} />
+
     </View>
   }
 
@@ -64,7 +67,7 @@ const RegisterScreen = (props) => {
         style={styles.input}
         value={email}
         onChangeText={val => setEmail(val)}
-        placeholder="enter username"
+        placeholder="enter email"
         keyboardType="email-address"
         placeholderTextColor={colors.border}
       />
@@ -119,9 +122,12 @@ const RegisterScreen = (props) => {
   }
 
   function renderRegisterButton() {
-    return <AppButtonOnlyText onPress={() => console.log("Register")} styles={styles.register} text={'Sign Up'} textColor={colors.text} />
-
+    return <AppButtonOnlyText onPress={() => registerControl()} styles={styles.register} text={'Sign Up'} textColor={colors.text} />
   }
+
+  async function registerControl(){
+    console.log("test");
+  } 
 
 };
 const mapStateToProps = (state) => {
