@@ -7,34 +7,16 @@ import {ActivityIndicator} from 'react-native-paper';
 import {connect} from 'react-redux';
 import BaseView from '../../../../core/base/baseview';
 import ThemeProvider from '../../../../core/init/theme/theme_provider';
+import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
+import { sharedPref } from '../../../../core/init/cache/cache';
 
 const SplashView = props => {
   const navigation = useNavigation();
   const [open, setOpen] = React.useState(false);
   const colors = ThemeProvider(props.theme.colors);
   React.useEffect(() => {
-    setTimeout(() => {
-      isSign().then(res => {
-        if (res == true) {
-          goPage('Test');
-        } else {
-          goPage('Login');
-        }
-      });
-    }, 1500);
+    cacheControl()
   }, []);
-
-  function goPage(page) {
-    setOpen(true);
-    setTimeout(() => {
-      navigation.navigate(page);
-    }, 1500);
-  }
-
-  async function isSign() {
-    let login = await GoogleSignin.isSignedIn();
-    return login;
-  }
 
   return (
     <BaseView
@@ -69,6 +51,36 @@ const SplashView = props => {
       </View>
     );
   }
+
+  async function cacheControl(){
+    let res = await sharedPref(CacheEnum.Get,CacheList.user,'')
+    if(res == null){
+      goPage('Login')
+    }else{
+      setTimeout(() => {
+        isSign().then(res => {
+          if (res == true) {
+            goPage('Test');
+          } else {
+            goPage('Login');
+          }
+        });
+      }, 1500);
+    }
+  }
+
+  function goPage(page) {
+    setOpen(true);
+    setTimeout(() => {
+      navigation.navigate(page);
+    }, 1500);
+  }
+
+  async function isSign() {
+    let login = await GoogleSignin.isSignedIn();
+    return login;
+  }
+
 };
 
 const mapStateToProps = state => {

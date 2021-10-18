@@ -19,8 +19,8 @@ import {APPLICATION_CONSTANT} from '../../../core/constant/app/applicationconsta
 import {onGoogleButtonPress} from './manager/google_sign';
 import {useNavigation} from '@react-navigation/core';
 import LoadingView from '../../_partial/loading/loading';
-import CacheManager from '../../../core/init/cache/cache';
-import { CacheEnum } from '../../../core/constant/cache/cache_enum';
+import CacheManager, { sharedPref } from '../../../core/init/cache/cache';
+import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 
 const LoginScreen = props => {
   const navigation = useNavigation();
@@ -125,9 +125,10 @@ const LoginScreen = props => {
               activeScale={APPLICATION_CONSTANT.SCALE}
               onPress={async () => {
                 setLoading(true);
-                await onGoogleButtonPress().then((val) => {
+                await onGoogleButtonPress().then(async (val) => {
                   if (val != null) {
                     setLoading(false);
+                    await sharedPref(CacheEnum.Set,CacheList.user,val)         
                     navigation.navigate('Test');
                   } else {
                     console.log(val);

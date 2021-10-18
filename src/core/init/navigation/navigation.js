@@ -1,12 +1,13 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationList} from '../../constant/navigation/navigation_constant';
-import {NavigationContainer} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
-import {darkTheme, lightTheme} from '../theme/apptheme';
-import {changeTheme} from '../../../redux/actions/base_actions';
-import {useColorScheme} from 'react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationList } from '../../constant/navigation/navigation_constant';
+import { NavigationContainer } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { darkTheme, lightTheme } from '../theme/apptheme';
+import { changeTheme } from '../../../redux/actions/base_actions';
+import { useColorScheme } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { APPLICATION_CONSTANT } from '../../constant/app/applicationconstant';
 
 const Stack = createNativeStackNavigator();
 export const Navigation = props => {
@@ -15,10 +16,9 @@ export const Navigation = props => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        '926170197189-2pb6s4qcthjv178b5esmniciltiisnb0.apps.googleusercontent.com',
+      webClientId: APPLICATION_CONSTANT.WEB_CLIENTID,
       client_type: 3,
-      iosClientId :'926170197189-25d3sne7o3a65fk968c19c7pvn96kore.apps.googleusercontent.com',
+      iosClientId: APPLICATION_CONSTANT.IOS_CLIENTID,
       offlineAccess: false
     });
     if (scheme !== 'dark') {
