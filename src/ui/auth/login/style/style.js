@@ -28,7 +28,7 @@ export const LoginStyle = (color) =>
     },
     input: {
       height: 40,
-      borderWidth: 0.5,
+      borderWidth: 0.7,
       padding: 10,
       borderRadius:3,
       marginVertical:5,

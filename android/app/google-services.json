@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "926170197189-um8pvr2nnkst1hhu1cm3a39pbfhamui6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firestoreexam",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "926170197189-2pb6s4qcthjv178b5esmniciltiisnb0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "926170197189-2pb6s4qcthjv178b5esmniciltiisnb0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "926170197189-25d3sne7o3a65fk968c19c7pvn96kore.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.firestoreExam"
+              }
             }
           ]
         }

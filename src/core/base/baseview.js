@@ -3,6 +3,8 @@ import {View, Text, SafeAreaView, StatusBar} from 'react-native';
 import {BaseStyle} from './style/base.style';
 import PropTypes from 'prop-types';
 import AppBar from '../../ui/_partial/header/appbar';
+import store from '../../redux/store/store';
+import {Caselist} from '../../redux/_caselist/caselist';
 
 const BaseView = ({
   screen,
@@ -13,7 +15,7 @@ const BaseView = ({
   isBack = defProps.isBack,
   headerElevation = defProps.elevation,
   headerText,
-  headerActions
+  headerActions,
 }) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: statusColor}}>
@@ -23,7 +25,7 @@ const BaseView = ({
           <AppBar
             isBack={isBack}
             color={'white'}
-            text= {headerText}
+            text={headerText}
             backgroundColor={statusColor}
             backPress={() => console.log('back')}
             elevation={headerElevation}
@@ -45,8 +47,8 @@ BaseView.propTypes = {
 };
 
 const defProps = {
-  statusColor: 'orange',
-  backgroundColor: 'white',
+  statusColor: store.getState(Caselist.theme).base.theme.colors.text,
+  backgroundColor: store.getState(Caselist.theme).base.theme.colors.text,
   headerHidden: false,
   barStyle: 'dark-content',
   isBack: true,
