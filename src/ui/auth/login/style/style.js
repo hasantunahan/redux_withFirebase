@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { colors } from 'react-native-elements';
-
 export const LoginStyle = (color) =>
   StyleSheet.create({
     main: {
@@ -38,14 +36,14 @@ export const LoginStyle = (color) =>
     login : {
       alignItems: 'center',
       marginVertical: 12,
-      backgroundColor: colors.primary,
+      backgroundColor: color.primary,
       padding: 8,
       borderRadius: 3,
   },
   google :{
     alignItems: 'center',
     marginVertical: 12,
-    backgroundColor: colors.change,
+    backgroundColor: color.change,
     padding: 8,
     borderRadius: 3
 },

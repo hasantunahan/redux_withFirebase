@@ -45,7 +45,7 @@ const SplashView = props => {
         {open && (
           <View style={{marginTop: 15}}>
             <ActivityIndicator color={colors.text} />
-            <Text style={{color: colors.text, marginTop: 15}}>Yükleniyor</Text>
+            <Text style={{color: colors.text, marginTop: 15}}>Loading</Text>
           </View>
         )}
       </View>

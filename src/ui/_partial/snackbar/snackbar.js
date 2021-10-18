@@ -14,7 +14,7 @@ const CustomSnackBar = ({ isDismiss, text,backgroundColor }) => {
             style={{
                 backgroundColor: backgroundColor ?? 'black'
             }}
-            duration={2000}
+            duration={2500}
             visible={visible}
             onDismiss={onDismissSnackBar}
             action={{

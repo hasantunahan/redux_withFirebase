@@ -20,10 +20,11 @@ import { sharedPref } from '../../../core/init/cache/cache';
 import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DividerWithText from '../../_partial/divider/divider_with_text';
-import { Snackbar } from 'react-native-paper';
 import CustomSnackBar from '../../_partial/snackbar/snackbar';
 import { changeTheme } from '../../../redux/actions/base_actions';
 import { darkTheme } from '../../../core/init/theme/apptheme';
+import AppLogo from '../../_partial/logo/logo';
+import AppButtonOnlyText from '../../../core/components/button';
 
 const LoginScreen = props => {
     const [snackbar, setSnackbar] = React.useState({
@@ -37,6 +38,7 @@ const LoginScreen = props => {
     const dispatch = useDispatch();
     const [secure, setSecure] = React.useState(true);
     const [password, setPassword] = React.useState('');
+    const [email,setEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
 
 
@@ -62,24 +64,7 @@ const LoginScreen = props => {
                         {renderLoginButton()}
                         <DividerWithText />
                         {renderGoogleButton()}
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginTop: 8,
-                            }}>
-                            <Text style={{ color: colors.text }}>
-                                Don't have an account yet?{' '}
-                            </Text>
-
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('Register')}
-                                style={{ alignItems: 'center' }}>
-                                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                                    Sign Up
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        {renderAccountGoSignUp()}
                         {renderLoadingBottom()}
                     </View>
                 </ScrollView>
@@ -91,23 +76,41 @@ const LoginScreen = props => {
     async function signGoogle() {
         setLoading(true);
         await onGoogleButtonPress().then(async (val) => {
-            if (val != null) {
+            if (val.error == null) {
                 setLoading(false);
                 console.log(val);
                 await sharedPref(CacheEnum.Set, CacheList.user, val)
                 navigation.navigate('Test');
             } else {
                 setLoading(false);
+                messageBar(colors.warning,'Login canceled')
             }
         });
     }
 
+    function renderAccountGoSignUp(){
+        return <View
+        style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 8,
+        }}>
+        <Text style={{ color: colors.text }}>
+            Don't have an account yet?{' '}
+        </Text>
+
+        <TouchableOpacity
+            onPress={() => navigation.navigate('Register')}
+            style={{ alignItems: 'center' }}>
+            <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
+                Sign Up
+            </Text>
+        </TouchableOpacity>
+    </View>
+    }
+
     function renderLoginButton() {
-        return <TouchableScale
-            style={styles.login}
-            activeScale={APPLICATION_CONSTANT.SCALE}>
-            <Text style={{ color: colors.text }}>Login</Text>
-        </TouchableScale>
+        return <AppButtonOnlyText onPress={()=> formControl()} styles={styles.login} text={'Login' } textColor={colors.text} />
     }
 
     function renderGoogleButton() {
@@ -139,6 +142,8 @@ const LoginScreen = props => {
         return <View>
             <TextInput
                 style={styles.input}
+                value={email}
+                onChangeText={val=> setEmail(val)}
                 placeholder="enter username"
                 keyboardType="email-address"
                 placeholderTextColor={colors.border}
@@ -153,7 +158,7 @@ const LoginScreen = props => {
                     secureTextEntry={secure}
                 />
                 <TouchableOpacity onPress={() => setSecure(!secure)}>
-                    <Ionicons style={{ position: 'absolute', right: 10, bottom: 13 }} name={secure ? 'eye' : 'eye-off'} size={19} />
+                    <Ionicons style={{ position: 'absolute', right: 10, bottom: 13 }} color={colors.text} name={secure ? 'eye' : 'eye-off'} size={19} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -169,19 +174,32 @@ const LoginScreen = props => {
 
     function renderLogo() {
         return <View style={styles.logo_view}>
-            {props.theme.dark ? (
-                <Image
-                    style={styles.logo}
-                    source={require('../../../../asset/image/logo_dark.png')}
-                />
-            ) : (
-                <Image
-                    style={styles.logo}
-                    source={require('../../../../asset/image/logo_light.png')}
-                />
-            )}
+            <AppLogo isDark={props.theme.dark} />
         </View>
     }
+
+    function formControl(){
+        if(email.length > 0 && password.length > 0 && email != '' && password != '') {
+           
+        }else{
+            messageBar(colors.error,'email and password dont be empty')
+        }
+    }
+    function messageBar(color,message){
+        setSnackbar({
+            color : color,
+            message : message,
+            visible :true
+        })
+        setTimeout(() => {
+            setSnackbar({
+                color : 'black',
+                message : '',
+                visible :false
+            })
+        }, 3000);
+    }
+
 };
 const mapStateToProps = state => {
     return {

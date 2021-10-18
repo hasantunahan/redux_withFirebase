@@ -18,8 +18,8 @@ const DividerWithText = ({ text }) => {
                     height: 0.5,
                     backgroundColor: colors.border,
                 }}></View>
-            <Text style={{ marginHorizontal: 8, color: colors.text }}>
-                {text ?? 'Ya da'}
+            <Text style={{ marginHorizontal: 10, color: colors.text }}>
+                {text ?? 'or'}
             </Text>
 
             <View
