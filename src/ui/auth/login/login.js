@@ -25,6 +25,8 @@ import { changeTheme } from '../../../redux/actions/base_actions';
 import { darkTheme } from '../../../core/init/theme/apptheme';
 import AppLogo from '../../_partial/logo/logo';
 import AppButtonOnlyText from '../../../core/components/button';
+import { Fire_Collections } from '../../../core/constant/firebase_collection/firebase';
+import { FirebaseAddData } from './service/firebase_add_user';
 
 const LoginScreen = props => {
     const [snackbar, setSnackbar] = React.useState({
@@ -38,7 +40,7 @@ const LoginScreen = props => {
     const dispatch = useDispatch();
     const [secure, setSecure] = React.useState(true);
     const [password, setPassword] = React.useState('');
-    const [email,setEmail] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
 
 
@@ -54,9 +56,9 @@ const LoginScreen = props => {
     function renderLogin() {
         return (
             <View style={styles.main}>
-                  <TouchableOpacity onPress={() => dispatch(changeTheme(darkTheme))}>
+                <TouchableOpacity onPress={() => dispatch(changeTheme(darkTheme))}>
                     <Text style={{ color: colors.text }}>Change Theme</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
                 <ScrollView>
                     {renderLogo()}
                     <View style={[styles.screen_padding, { marginTop: 40 }]}>
@@ -77,40 +79,40 @@ const LoginScreen = props => {
         setLoading(true);
         await onGoogleButtonPress().then(async (val) => {
             if (val.error == null) {
+                FirebaseAddData(Fire_Collections.user, val, call => console.log(call))
                 setLoading(false);
-                console.log(val);
                 await sharedPref(CacheEnum.Set, CacheList.user, val)
                 navigation.navigate('Test');
             } else {
                 setLoading(false);
-                messageBar(colors.warning,'Login canceled')
+                messageBar(colors.warning, 'Login canceled')
             }
         });
     }
 
-    function renderAccountGoSignUp(){
+    function renderAccountGoSignUp() {
         return <View
-        style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 8,
-        }}>
-        <Text style={{ color: colors.text }}>
-            Don't have an account yet?{' '}
-        </Text>
-
-        <TouchableOpacity
-            onPress={() => navigation.navigate('Register')}
-            style={{ alignItems: 'center' }}>
-            <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                Sign Up
+            style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 8,
+            }}>
+            <Text style={{ color: colors.text }}>
+                Don't have an account yet?{' '}
             </Text>
-        </TouchableOpacity>
-    </View>
+
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Register')}
+                style={{ alignItems: 'center' }}>
+                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
+                    Sign Up
+            </Text>
+            </TouchableOpacity>
+        </View>
     }
 
     function renderLoginButton() {
-        return <AppButtonOnlyText onPress={()=> formControl()} styles={styles.login} text={'Login' } textColor={colors.text} />
+        return <AppButtonOnlyText onPress={() => formControl()} styles={styles.login} text={'Login'} textColor={colors.text} />
     }
 
     function renderGoogleButton() {
@@ -143,7 +145,7 @@ const LoginScreen = props => {
             <TextInput
                 style={styles.input}
                 value={email}
-                onChangeText={val=> setEmail(val)}
+                onChangeText={val => setEmail(val)}
                 placeholder="enter email"
                 keyboardType="email-address"
                 placeholderTextColor={colors.border}
@@ -178,24 +180,25 @@ const LoginScreen = props => {
         </View>
     }
 
-    function formControl(){
-        if(email.length > 0 && password.length > 0 && email != '' && password != '') {
-           
-        }else{
-            messageBar(colors.error,'email and password dont be empty')
+    function formControl() {
+        if (email.length > 0 && password.length > 0 && email != '' && password != '') {
+
+        } else {
+            messageBar(colors.error, 'email and password dont be empty')
         }
     }
-    function messageBar(color,message){
+
+    function messageBar(color, message) {
         setSnackbar({
-            color : color,
-            message : message,
-            visible :true
+            color: color,
+            message: message,
+            visible: true
         })
         setTimeout(() => {
             setSnackbar({
-                color : 'black',
-                message : '',
-                visible :false
+                color: 'black',
+                message: '',
+                visible: false
             })
         }, 3000);
     }
