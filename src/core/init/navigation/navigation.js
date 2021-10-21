@@ -1,25 +1,28 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationList } from '../../constant/navigation/navigation_constant';
-import { NavigationContainer } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { darkTheme, lightTheme } from '../theme/apptheme';
-import { changeTheme } from '../../../redux/actions/base_actions';
-import { useColorScheme } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { APPLICATION_CONSTANT } from '../../constant/app/applicationconstant';
-
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationList} from '../../constant/navigation/navigation_constant';
+import {NavigationContainer} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {darkTheme, lightTheme} from '../theme/apptheme';
+import {changeTheme} from '../../../redux/actions/base_actions';
+import {useColorScheme} from 'react-native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {APPLICATION_CONSTANT} from '../../constant/app/applicationconstant';
+import auth from '@react-native-firebase/auth'
+import { sharedPref } from '../cache/cache';
+import { CacheEnum, CacheList } from '../../constant/cache/cache_enum';
 const Stack = createNativeStackNavigator();
 export const Navigation = props => {
   const [isLogin, setIsLogin] = React.useState(false);
   const scheme = useColorScheme();
   const dispatch = useDispatch();
   React.useEffect(() => {
+    console.log(auth().currentUser);
     GoogleSignin.configure({
       webClientId: APPLICATION_CONSTANT.WEB_CLIENTID,
       client_type: 3,
       iosClientId: APPLICATION_CONSTANT.IOS_CLIENTID,
-      offlineAccess: false
+      offlineAccess: false,
     });
     if (scheme !== 'dark') {
       dispatch(changeTheme(lightTheme));
@@ -31,7 +34,7 @@ export const Navigation = props => {
   return (
     <NavigationContainer theme={scheme === 'dark' ? darkTheme : lightTheme}>
       <Stack.Navigator
-        initialRouteName={NavigationList[0].page}
+        initialRouteName={NavigationList[0].name}
         screenOptions={{
           headerShown: false,
         }}>

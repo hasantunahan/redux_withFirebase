@@ -1,9 +1,11 @@
-export const CacheEnum ={
-    Get : 'Get',
-    Set : 'Set',
-    Remove : 'Remove'
-}
+export const CacheEnum = {
+  Get: 'Get',
+  Set: 'Set',
+  Remove: 'Remove',
+  Merge: 'Merge',
+};
 
 export const CacheList = {
-    user : 'User'
-}
+  user: 'User',
+  registerInfo: 'registerInfo'
+};

@@ -1,21 +1,19 @@
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {View, Text, Image} from 'react-native';
-import {color} from 'react-native-elements/dist/helpers';
-import {ActivityIndicator} from 'react-native-paper';
 import {connect} from 'react-redux';
 import BaseView from '../../../../core/base/baseview';
 import ThemeProvider from '../../../../core/init/theme/theme_provider';
-import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
-import { sharedPref } from '../../../../core/init/cache/cache';
+import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
+import {sharedGetAllKey, sharedPref} from '../../../../core/init/cache/cache';
 
 const SplashView = props => {
   const navigation = useNavigation();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const colors = ThemeProvider(props.theme.colors);
+
   React.useEffect(() => {
-    cacheControl()
+    didHaveData();
   }, []);
 
   return (
@@ -44,43 +42,36 @@ const SplashView = props => {
         )}
         {open && (
           <View style={{marginTop: 15}}>
-            <ActivityIndicator color={colors.text} />
-            <Text style={{color: colors.text, marginTop: 15}}>Loading</Text>
+            <Text style={{color: colors.text, marginTop: 15}}>
+              {'Loading...'}
+            </Text>
           </View>
         )}
       </View>
     );
   }
 
-  async function cacheControl(){
-    let res = await sharedPref(CacheEnum.Get,CacheList.user,'')
-    if(res == null){
-      goPage('Login')
-    }else{
-      setTimeout(() => {
-        isSign().then(res => {
-          if (res == true) {
-            goPage('Test');
-          } else {
-            goPage('Login');
-          }
-        });
-      }, 1500);
+  async function didHaveData() {
+    let data = await sharedPref(CacheEnum.Get, CacheList.registerInfo);
+    console.log('shared Data' + JSON.stringify(data));
+    if (data == null) {
+      goPage('Login');
+    } else {
+      if (!data.emailVerified) {
+        console.log('register email');
+        goPage('Register', {email: data.user.email, type: 1});
+      } else {
+        goPage('Test');
+      }
     }
   }
 
-  function goPage(page) {
+  function goPage(page, args) {
     setOpen(true);
     setTimeout(() => {
-      navigation.navigate(page);
+      navigation.navigate(page, args);
     }, 1500);
   }
-
-  async function isSign() {
-    let login = await GoogleSignin.isSignedIn();
-    return login;
-  }
-
 };
 
 const mapStateToProps = state => {

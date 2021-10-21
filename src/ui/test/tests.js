@@ -1,18 +1,35 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import { sharedPref } from '../../core/init/cache/cache';
-import { CacheEnum, CacheList } from '../../core/constant/cache/cache_enum';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {sharedPref} from '../../core/init/cache/cache';
+import {CacheEnum, CacheList} from '../../core/constant/cache/cache_enum';
+import { signOutGoogle } from '../auth/login/manager/google_sign';
+import { emailSignOut } from '../auth/register/manager/email_sign_up';
+import { useNavigation } from '@react-navigation/core';
 const Tests = ({}) => {
-  React.useEffect(() => {
-     fetchdata()
-  }, [])
-  async function fetchdata(){
-    let res = await sharedPref(CacheEnum.Get,CacheList.user,'')
-   // console.log(res);
+  const navigation = useNavigation()
+
+  async function signOut() {
+    var res = await sharedPref(CacheEnum.Get,CacheList.registerInfo);
+    if(res.type == 'Google'){
+      console.log("gggg");
+      signOutGoogle((item)=>console.log(item),err=>console.log(err)).then(()=>{
+      navigation.navigate('Login')
+      })
+
+    }else{
+     console.log('emaillllll');
+      emailSignOut(call=>console.log(call),err=>console.log(err)).then(()=>{
+      navigation.navigate('Login')
+      })
+    }
+    // console.log(res);
   }
   return (
-    <View style={{flex:1,backgroundColor : 'orange'}}>
+    <View style={{flex: 1, backgroundColor: 'orange'}}>
       <Text>test</Text>
+      <TouchableOpacity onPress={async ()=> await signOut()}>
+        <Text>Çıkış Yap</Text>
+      </TouchableOpacity>
     </View>
   );
 };
