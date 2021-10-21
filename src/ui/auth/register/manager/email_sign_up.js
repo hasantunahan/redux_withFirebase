@@ -21,14 +21,19 @@ export async function emailRegister(email, password, err, res, call, verify) {
     });
 }
 
-export async function emailLogin(email, password, res) {
+export async function emailLogin(email, password, res,err) {
   auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       res('Sign in succesfully');
+      sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
+        emailVerified: true,
+        user: auth().currentUser,
+        type: 'Email',
+      });
     })
     .catch(error => {
-      error('email or password is wrong');
+      err('email or password is wrong');
     });
 }
 
