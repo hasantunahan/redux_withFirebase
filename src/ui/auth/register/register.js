@@ -208,7 +208,7 @@ const RegisterScreen = props => {
             setLoading(false), messageBar(colors.error, err);
           },
           res => {
-            setLoading(false), messageBar(colors.success, res);
+            setLoading(false), messageBar(colors.success, res),clearText()
           },
           call => setSend(call),
           isVerify => setVerify(isVerify),
@@ -236,10 +236,16 @@ const RegisterScreen = props => {
     }, 3000);
   }
 
+  function clearText(){
+    setEmail('')
+    setPassword('')
+    setPasswordAgain('')
+  }
+
   function renderEmailVerificationBody() {
     return (
       <ScrollView>
-        <View style={{ marginTop: 30 }}>
+        <View style={{ justifyContent:'center',marginTop:40 }}>
           <View style={{ paddingHorizontal: 12 }}>
             <Image style={{ alignSelf: 'center', width: 120, height: 120 }} source={require('../../../../asset/image/verify.png')} />
             <View style={{ marginTop: 20 }}>
@@ -258,13 +264,13 @@ const RegisterScreen = props => {
                 }}>{`To confirm email address,if didn't get a link to your email address`}</Text>
               <View style={{ marginTop: 20 }}>
                 <AppButtonOnlyText
-                  onPress={() => console.log('send again')}
+                  onPress={() => console.log('open again')}
                   styles={styles.register}
-                  text={'Send Again'}
+                  text={'Open your mail'}
                   textColor={colors.text}
                 />
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 4 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical:4 }}>
                 <Text style={{ marginRight: 5, color: colors.text }}>{'I have account,'}</Text>
                 <TouchableOpacity onPress={() => {
                   navigation.navigate('Login'),

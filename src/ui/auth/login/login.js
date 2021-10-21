@@ -89,9 +89,11 @@ const LoginScreen = props => {
         setLoading(false);
         await sharedPref(CacheEnum.Set, CacheList.user, val);
         navigation.navigate('Test');
+        clearText()
       } else {
         setLoading(false);
         messageBar(colors.warning, 'Login canceled');
+        clearText()
       }
     });
   }
@@ -218,6 +220,7 @@ const LoginScreen = props => {
             navigation.navigate('Test')
           }, 250),
           setLoading(false)
+         clearText()
       }, err => {
         messageBar(colors.error, err),
         setLoading(false)
@@ -241,6 +244,11 @@ const LoginScreen = props => {
         visible: false,
       });
     }, 3000);
+  }
+
+  function clearText(){
+    setEmail('')
+    setPassword('')
   }
 };
 const mapStateToProps = state => {

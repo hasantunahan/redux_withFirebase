@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
-import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
-import {sharedPref} from '../../../../core/init/cache/cache';
+import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
+import { sharedPref } from '../../../../core/init/cache/cache';
 
 export async function emailRegister(email, password, err, res, call, verify) {
   auth()
@@ -21,7 +21,7 @@ export async function emailRegister(email, password, err, res, call, verify) {
     });
 }
 
-export async function emailLogin(email, password, res,err) {
+export async function emailLogin(email, password, res, err) {
   auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
