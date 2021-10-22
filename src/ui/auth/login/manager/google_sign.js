@@ -4,15 +4,26 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
 import {sharedPref} from '../../../../core/init/cache/cache';
+import auth from '@react-native-firebase/auth';
 
 export async function onGoogleButtonPress() {
   console.log(await GoogleSignin.isSignedIn());
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
+    await auth().signInWithCredential(googleCredential);
+    console.log('====================================');
+    console.log(userInfo.user);
+    console.log('====================================');
     sharedPref(CacheEnum.Set, CacheList.registerInfo, {
       emailVerified: true,
-      user: userInfo.user,
+      user: {
+        id: userInfo.user.id,
+        name: userInfo.user.name,
+        photo: userInfo.user.photo,
+        email: userInfo.user.email,
+      },
       type: 'Google',
     });
     return userInfo;
@@ -37,9 +48,14 @@ export async function isSign() {
   return login;
 }
 
-export async function signOutGoogle(callback,error) {
-  GoogleSignin.signOut()
-    .then(()=>{callback('User sign out successfully'),sharedPref(CacheEnum.Remove, CacheList.registerInfo)})
+export async function signOutGoogle(callback, error) {
+await GoogleSignin.signOut()
+    .then(() => {
+       sharedPref(CacheEnum.Remove, CacheList.registerInfo).then(
+         ()=>{
+          callback('User sign out successfully')
+         }
+       );
+    })
     .catch(error("User didn't sign out"));
-  
 }

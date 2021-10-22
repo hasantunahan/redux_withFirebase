@@ -21,6 +21,7 @@ export async function sharedPref(method, key, val) {
     console.log('remove');
     try {
       await AsyncStorage.removeItem(key);
+      return {err: null};
     } catch (e) {
       return {err: e};
     }

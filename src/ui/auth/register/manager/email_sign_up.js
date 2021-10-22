@@ -1,19 +1,44 @@
 import auth from '@react-native-firebase/auth';
-import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
-import { sharedPref } from '../../../../core/init/cache/cache';
+import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
+import {sharedPref} from '../../../../core/init/cache/cache';
 
-export async function emailRegister(email, password, err, res, call, verify) {
+function getUser(user){
+  return {
+    id: user.uid,
+    name: user.displayName,
+    photo: user.photoURL,
+    email: user.email,
+  }
+}
+
+export async function emailRegister(
+  email,
+  password,
+  err,
+  res,
+  call,
+  verify,
+  name,
+  url
+) {
   auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
-      res('User account created & signed in!');
-      call(1);
-      sharedPref(CacheEnum.Set, CacheList.registerInfo, {
-        emailVerified: false,
-        user: auth().currentUser,
-        type: 'Email',
-      });
-      sendEmail(verify, call);
+      auth()
+        .currentUser.updateProfile({
+          displayName: name,
+          photoURL: url,
+        })
+        .then(() => {
+          res('User account created & signed in!');
+          call(1);
+          sharedPref(CacheEnum.Set, CacheList.registerInfo, {
+            emailVerified: false,
+            user: getUser(auth().currentUser),
+            type: 'Email',
+          });
+          sendEmail(verify, call);
+        });
     })
     .catch(error => {
       call(0);
@@ -28,7 +53,7 @@ export async function emailLogin(email, password, res, err) {
       res('Sign in succesfully');
       sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
         emailVerified: true,
-        user: auth().currentUser,
+        user: getUser(auth().currentUser),
         type: 'Email',
       });
     })
@@ -38,11 +63,11 @@ export async function emailLogin(email, password, res, err) {
 }
 
 export async function emailSignOut(error, callback) {
-  auth()
+ await auth()
     .signOut()
     .then(() => {
       callback('User sign out'),
-        sharedPref(CacheEnum.Remove, CacheList.registerInfo)
+        sharedPref(CacheEnum.Remove, CacheList.registerInfo);
     })
     .catch(err => error(err));
 }
@@ -67,13 +92,15 @@ export function userControl(verify) {
       const unsubscribeSetInterval = setInterval(() => {
         if (auth().currentUser != null) {
           auth().currentUser.reload();
+        }else{
+          verify(false)
         }
       }, 3000);
       if (response.emailVerified) {
         verify(true);
         sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
           emailVerified: true,
-          user: auth().currentUser,
+          user: getUser(auth().currentUser),
           type: 'Email',
         });
         console.log(response.emailVerified);
@@ -82,6 +109,8 @@ export function userControl(verify) {
       } else {
         verify(false);
       }
+    }else{
+      verify(false)
     }
   });
 }

@@ -9,11 +9,8 @@ import {useColorScheme} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {APPLICATION_CONSTANT} from '../../constant/app/applicationconstant';
 import auth from '@react-native-firebase/auth'
-import { sharedPref } from '../cache/cache';
-import { CacheEnum, CacheList } from '../../constant/cache/cache_enum';
 const Stack = createNativeStackNavigator();
 export const Navigation = props => {
-  const [isLogin, setIsLogin] = React.useState(false);
   const scheme = useColorScheme();
   const dispatch = useDispatch();
   React.useEffect(() => {

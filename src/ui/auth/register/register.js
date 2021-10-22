@@ -5,29 +5,31 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
 } from 'react-native';
 import BaseView from '../../../core/base/baseview';
-import { connect, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/core';
+import {connect, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/core';
 import ThemeProvider from '../../../core/init/theme/theme_provider';
-import { RegisterStyle } from './style/style';
+import {RegisterStyle} from './style/style';
 import AppLogo from '../../_partial/logo/logo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TouchableScale from 'react-native-touchable-scale';
-import { APPLICATION_CONSTANT } from '../../../core/constant/app/applicationconstant';
+import {APPLICATION_CONSTANT} from '../../../core/constant/app/applicationconstant';
 import AppButtonOnlyText from '../../../core/components/button';
 import CustomSnackBar from '../../_partial/snackbar/snackbar';
-import { emailRegister, userControl } from './manager/email_sign_up';
-import { FirebaseAddData } from '../login/service/firebase_add_user';
-import { ActivityIndicator } from 'react-native';
+import {emailRegister, userControl} from './manager/email_sign_up';
+import {FirebaseAddData} from '../login/service/firebase_add_user';
+import {ActivityIndicator} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import { sharedPref } from '../../../core/init/cache/cache';
-import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
-import { Register_Def_Args } from '../../../core/constant/default/register_def';
+import {sharedPref} from '../../../core/init/cache/cache';
+import {CacheEnum, CacheList} from '../../../core/constant/cache/cache_enum';
+import {Register_Def_Args} from '../../../core/constant/default/register_def';
+import {avatarList} from './avatarlist/avatar_list';
+import {color} from 'react-native-elements/dist/helpers';
 
 const RegisterScreen = props => {
-  const { params } = props.route;
+  const {params} = props.route;
   const [snackbar, setSnackbar] = React.useState({
     color: 'black',
     visible: false,
@@ -42,9 +44,11 @@ const RegisterScreen = props => {
   const [password, setPassword] = React.useState('');
   const [passwordAgain, setPasswordAgain] = React.useState('');
   const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [send, setSend] = React.useState(0);
   const [verify, setVerify] = React.useState(false);
+  const [choose, setChoose] = React.useState({});
 
   React.useEffect(() => {
     if (verify) {
@@ -55,11 +59,12 @@ const RegisterScreen = props => {
   }, [verify]);
 
   React.useEffect(() => {
+    console.log("geldim");
     setSend(params.type);
     userControl(verify => {
-      setVerify(verify)
-    })
-  }, []);
+      setVerify(verify);
+    });
+  }, [verify]);
 
   return (
     <BaseView
@@ -71,7 +76,6 @@ const RegisterScreen = props => {
       screen={send == 0 ? renderBody() : renderEmailVerificationBody()}
     />
   );
-
 
   function renderBody() {
     return (
@@ -96,7 +100,7 @@ const RegisterScreen = props => {
 
   function renderLoading() {
     return (
-      <View style={{ alignItems: 'center', marginTop: 25 }}>
+      <View style={{alignItems: 'center', marginTop: 25}}>
         <ActivityIndicator color={colors.text} />
       </View>
     );
@@ -104,7 +108,7 @@ const RegisterScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={{ alignItems: 'center', marginTop: 30 }}>
+      <View style={{alignItems: 'center', marginTop: 30}}>
         <AppLogo isDark={props.theme.dark} />
       </View>
     );
@@ -112,7 +116,45 @@ const RegisterScreen = props => {
 
   function renderFormElements() {
     return (
-      <View style={{ marginTop: 20 }}>
+      <View style={{marginTop: 20}}>
+        <View style={{paddingVertical: 8}}>
+          <Text style={{color: colors.text, opacity: 0.7}}>
+            {'Choose Avatar'}
+          </Text>
+          {
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={{flexDirection: 'row'}}>
+                {avatarList.map((item, index) => {
+                  return (
+                    <TouchableScale activeScale={APPLICATION_CONSTANT.SCALE} onPress={()=> {setChoose(item)}} key={index}>
+                      <View style={{marginRight: 10, marginTop: 10}}>
+                      <Image
+                        style={{
+                          width: 75,
+                          height: 75,
+                          borderRadius: 5,
+                          borderWidth: item.id == choose.id ? 3 : 0.7,
+                          borderColor:
+                            item.id == choose.id ? '#41fa7c' : colors.border,
+                        }}
+                        source={{uri: item.url}}
+                      />
+                    </View>
+                      </TouchableScale>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          }
+        </View>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={val => setName(val)}
+          placeholder="enter name"
+          keyboardType="email-address"
+          placeholderTextColor={colors.border}
+        />
         <TextInput
           style={styles.input}
           value={email}
@@ -132,7 +174,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecure(!secure)}>
             <Ionicons
-              style={{ position: 'absolute', right: 10, bottom: 13 }}
+              style={{position: 'absolute', right: 10, bottom: 13}}
               color={colors.text}
               name={secure ? 'eye' : 'eye-off'}
               size={19}
@@ -150,7 +192,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecureAgain(!secureAgain)}>
             <Ionicons
-              style={{ position: 'absolute', right: 10, bottom: 13 }}
+              style={{position: 'absolute', right: 10, bottom: 13}}
               color={colors.text}
               name={secureAgain ? 'eye' : 'eye-off'}
               size={19}
@@ -169,12 +211,12 @@ const RegisterScreen = props => {
           alignItems: 'center',
           marginTop: 8,
         }}>
-        <Text style={{ color: colors.text }}>I have an account, {''}</Text>
+        <Text style={{color: colors.text}}>I have an account, {''}</Text>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
-          style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Login</Text>
+          style={{alignItems: 'center'}}>
+          <Text style={{color: colors.primary, fontWeight: 'bold'}}>Login</Text>
         </TouchableOpacity>
       </View>
     );
@@ -193,11 +235,14 @@ const RegisterScreen = props => {
 
   async function registerControl() {
     if (
+      choose != 0 &&
       email.length > 0 &&
       password.length > 0 &&
+      name.length > 0 &&
       email != '' &&
+      name != '' &&
       password !=
-      '' /* && passwordAgain != '' && passwordAgain != '' && fullname != '' && fullname != '' */
+        '' /* && passwordAgain != '' && passwordAgain != '' && fullname != '' && fullname != '' */
     ) {
       if (/* password === passwordAgain */ 1) {
         setLoading(true);
@@ -208,10 +253,12 @@ const RegisterScreen = props => {
             setLoading(false), messageBar(colors.error, err);
           },
           res => {
-            setLoading(false), messageBar(colors.success, res),clearText()
+            setLoading(false), messageBar(colors.success, res), clearText();
           },
           call => setSend(call),
           isVerify => setVerify(isVerify),
+          name,
+          choose.url
         );
       } else {
         messageBar(colors.warning, "Passwords don't match");
@@ -236,21 +283,38 @@ const RegisterScreen = props => {
     }, 3000);
   }
 
-  function clearText(){
-    setEmail('')
-    setPassword('')
-    setPasswordAgain('')
+  function clearText() {
+    setEmail('');
+    setPassword('');
+    setPasswordAgain('');
   }
 
   function renderEmailVerificationBody() {
     return (
       <ScrollView>
-        <View style={{ justifyContent:'center',marginTop:40 }}>
-          <View style={{ paddingHorizontal: 12 }}>
-            <Image style={{ alignSelf: 'center', width: 120, height: 120 }} source={require('../../../../asset/image/verify.png')} />
-            <View style={{ marginTop: 20 }}>
-              <Text style={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center', fontSize: 18, color: colors.text }}>{'Check your email addres'}</Text>
-              <Text style={{ color: colors.primary, fontWeight: '500', textAlign: 'center' }}>
+        <View style={{justifyContent: 'center', marginTop: 40}}>
+          <View style={{paddingHorizontal: 12}}>
+            <Image
+              style={{alignSelf: 'center', width: 120, height: 120}}
+              source={require('../../../../asset/image/verify.png')}
+            />
+            <View style={{marginTop: 20}}>
+              <Text
+                style={{
+                  marginBottom: 2,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  fontSize: 18,
+                  color: colors.text,
+                }}>
+                {'Check your email addres'}
+              </Text>
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontWeight: '500',
+                  textAlign: 'center',
+                }}>
                 {params.email ? params.email : email}
               </Text>
               <Text
@@ -260,9 +324,9 @@ const RegisterScreen = props => {
                   width: '80%',
                   alignSelf: 'center',
                   color: colors.text,
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}>{`To confirm email address,if didn't get a link to your email address`}</Text>
-              <View style={{ marginTop: 20 }}>
+              <View style={{marginTop: 20}}>
                 <AppButtonOnlyText
                   onPress={() => console.log('open again')}
                   styles={styles.register}
@@ -270,28 +334,47 @@ const RegisterScreen = props => {
                   textColor={colors.text}
                 />
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical:4 }}>
-                <Text style={{ marginRight: 5, color: colors.text }}>{'I have account,'}</Text>
-                <TouchableOpacity onPress={() => {
-                  navigation.navigate('Login'),
-                    sharedPref(CacheEnum.Remove,
-                      CacheList.registerInfo),
-                    auth().currentUser.delete()
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginVertical: 4,
                 }}>
-                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{'Login'}</Text>
+                <Text style={{marginRight: 5, color: colors.text}}>
+                  {'I have account,'}
+                </Text>
+                <TouchableOpacity
+                  onPress={async() => {
+                    navigation.navigate('Login'),
+                    await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                      auth().currentUser.delete();
+                  }}>
+                  <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                    {'Login'}
+                  </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 4 }}>
-                <Text style={{ marginRight: 5, color: colors.text }}>{'I want to change email address,'}</Text>
-                <TouchableOpacity onPress={() => {
-                  sharedPref(CacheEnum.Remove, CacheList.registerInfo),
-                    auth().currentUser.delete(),
-                    setSend(0),
-                    setSnackbar({
-                      visible: false
-                    })
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginVertical: 4,
                 }}>
-                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{'Register'}</Text>
+                <Text style={{marginRight: 5, color: colors.text}}>
+                  {'I want to change email address,'}
+                </Text>
+                <TouchableOpacity
+                  onPress={async () => {
+                   await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                      auth().currentUser.delete(),
+                      setSend(0),
+                      setSnackbar({
+                        visible: false,
+                      });
+                  }}>
+                  <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                    {'Register'}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -300,7 +383,6 @@ const RegisterScreen = props => {
       </ScrollView>
     );
   }
-
 };
 const mapStateToProps = state => {
   return {

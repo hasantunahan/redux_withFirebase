@@ -109,7 +109,10 @@ const LoginScreen = props => {
         <Text style={{ color: colors.text }}>Don't have an account yet? </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('Register', Register_Def_Args)}
+          onPress={() => navigation.navigate('Register', {
+            email :'',
+            type :0
+        })}
           style={{ alignItems: 'center' }}>
           <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
             Sign Up
