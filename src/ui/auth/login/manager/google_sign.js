@@ -53,7 +53,8 @@ await GoogleSignin.signOut()
     .then(() => {
        sharedPref(CacheEnum.Remove, CacheList.registerInfo).then(
          ()=>{
-          callback('User sign out successfully')
+          callback('User sign out successfully'),
+          auth().currentUser.delete()
          }
        );
     })

@@ -1,8 +1,8 @@
 import auth from '@react-native-firebase/auth';
-import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
-import {sharedPref} from '../../../../core/init/cache/cache';
+import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
+import { sharedPref } from '../../../../core/init/cache/cache';
 
-function getUser(user){
+function getUser(user) {
   return {
     id: user.uid,
     name: user.displayName,
@@ -21,7 +21,7 @@ export async function emailRegister(
   name,
   url
 ) {
-  auth()
+  await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       auth()
@@ -47,7 +47,7 @@ export async function emailRegister(
 }
 
 export async function emailLogin(email, password, res, err) {
-  auth()
+  await auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       res('Sign in succesfully');
@@ -63,57 +63,79 @@ export async function emailLogin(email, password, res, err) {
 }
 
 export async function emailSignOut(error, callback) {
- await auth()
+  await auth()
     .signOut()
     .then(() => {
-      callback('User sign out'),
-        sharedPref(CacheEnum.Remove, CacheList.registerInfo);
+      callback('User sign out email'),
+      sharedPref(CacheEnum.Remove, CacheList.registerInfo)
     })
     .catch(err => error(err));
 }
 
 async function sendEmail(verify, call) {
-  auth()
+  await auth()
     .currentUser.sendEmailVerification()
     .then(() => {
       console.log(
         'Waiting for verification. Check your email!\nYou can close this verification and came back later',
       );
-      userControl(verify);
     })
     .catch(() => {
       call(0);
     });
 }
 
-export function userControl(verify) {
-  const unsubscribeOnUserChanged = auth().onUserChanged(response => {
-    if (response != null) {
-      const unsubscribeSetInterval = setInterval(() => {
+export async function userControl(verify) {
+
+
+    console.log('res içerde');
+    if(auth().currentUser != null){
+      auth().currentUser.reload().then(()=>{
+        auth().onAuthStateChanged((user)=> {
+          if(user != null){
+            if (user.emailVerified) {
+              verify(true);
+              sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
+                emailVerified: true,
+                user: getUser(auth().currentUser),
+                type: 'Email',
+              });
+            }else{
+              verify(false)
+            }
+          }else{
+            verify(false)
+          }
+        });
+      })
+    }
+
+    
+    /* 
+
+    auth().onUserChanged(response => {
+      console.log('====================================');
+      console.log('onuserchange :');
+      console.log('====================================');
+      if (response != null) {
         if (auth().currentUser != null) {
           auth().currentUser.reload();
-        }else{
+          if (response.emailVerified) {
+            verify(true);
+            sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
+              emailVerified: true,
+              user: getUser(auth().currentUser),
+              type: 'Email',
+            });
+          }
+        } else {
           verify(false)
         }
-      }, 3000);
-      if (response.emailVerified) {
-        verify(true);
-        sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
-          emailVerified: true,
-          user: getUser(auth().currentUser),
-          type: 'Email',
-        });
-        console.log(response.emailVerified);
-        clearInterval(unsubscribeSetInterval);
-        return unsubscribeOnUserChanged();
       } else {
-        verify(false);
+        verify(false)
       }
-    }else{
-      verify(false)
-    }
-  });
-}
+    }); */
+  }
 
 function registerError(error, err) {
   if (error.code === 'auth/email-already-in-use') {

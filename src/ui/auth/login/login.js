@@ -25,9 +25,6 @@ import { changeTheme } from '../../../redux/actions/base_actions';
 import { darkTheme } from '../../../core/init/theme/apptheme';
 import AppLogo from '../../_partial/logo/logo';
 import AppButtonOnlyText from '../../../core/components/button';
-import { Fire_Collections } from '../../../core/constant/firebase_collection/firebase';
-import { FirebaseAddData } from './service/firebase_add_user';
-import { Register_Def_Args } from '../../../core/constant/default/register_def';
 import { emailLogin } from '../register/manager/email_sign_up';
 
 const LoginScreen = props => {

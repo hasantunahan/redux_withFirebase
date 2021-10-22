@@ -8,28 +8,25 @@ import {
   Image,
 } from 'react-native';
 import BaseView from '../../../core/base/baseview';
-import {connect, useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/core';
+import { connect, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/core';
 import ThemeProvider from '../../../core/init/theme/theme_provider';
-import {RegisterStyle} from './style/style';
+import { RegisterStyle } from './style/style';
 import AppLogo from '../../_partial/logo/logo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TouchableScale from 'react-native-touchable-scale';
-import {APPLICATION_CONSTANT} from '../../../core/constant/app/applicationconstant';
+import { APPLICATION_CONSTANT } from '../../../core/constant/app/applicationconstant';
 import AppButtonOnlyText from '../../../core/components/button';
 import CustomSnackBar from '../../_partial/snackbar/snackbar';
-import {emailRegister, userControl} from './manager/email_sign_up';
-import {FirebaseAddData} from '../login/service/firebase_add_user';
-import {ActivityIndicator} from 'react-native';
+import { emailRegister, userControl } from './manager/email_sign_up';
+import { ActivityIndicator } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {sharedPref} from '../../../core/init/cache/cache';
-import {CacheEnum, CacheList} from '../../../core/constant/cache/cache_enum';
-import {Register_Def_Args} from '../../../core/constant/default/register_def';
-import {avatarList} from './avatarlist/avatar_list';
-import {color} from 'react-native-elements/dist/helpers';
+import { sharedPref } from '../../../core/init/cache/cache';
+import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
+import { avatarList } from './avatarlist/avatar_list';
 
 const RegisterScreen = props => {
-  const {params} = props.route;
+  const { params } = props.route;
   const [snackbar, setSnackbar] = React.useState({
     color: 'black',
     visible: false,
@@ -51,20 +48,25 @@ const RegisterScreen = props => {
   const [choose, setChoose] = React.useState({});
 
   React.useEffect(() => {
-    if (verify) {
-      setTimeout(() => {
+    control().then(()=>{
+      if(verify){
         navigation.navigate('Test');
-      }, 250);
-    }
+      }else{
+        console.log('====================================');
+        console.log("not login yet");
+        console.log('====================================');
+      }
+    })
   }, [verify]);
 
-  React.useEffect(() => {
+  async function control() {
     console.log("geldim");
     setSend(params.type);
     userControl(verify => {
+      console.log('Control verify' + verify);
       setVerify(verify);
     });
-  }, [verify]);
+  }
 
   return (
     <BaseView
@@ -100,7 +102,7 @@ const RegisterScreen = props => {
 
   function renderLoading() {
     return (
-      <View style={{alignItems: 'center', marginTop: 25}}>
+      <View style={{ alignItems: 'center', marginTop: 25 }}>
         <ActivityIndicator color={colors.text} />
       </View>
     );
@@ -108,7 +110,7 @@ const RegisterScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={{alignItems: 'center', marginTop: 30}}>
+      <View style={{ alignItems: 'center', marginTop: 30 }}>
         <AppLogo isDark={props.theme.dark} />
       </View>
     );
@@ -116,31 +118,31 @@ const RegisterScreen = props => {
 
   function renderFormElements() {
     return (
-      <View style={{marginTop: 20}}>
-        <View style={{paddingVertical: 8}}>
-          <Text style={{color: colors.text, opacity: 0.7}}>
+      <View style={{ marginTop: 20 }}>
+        <View style={{ paddingVertical: 8 }}>
+          <Text style={{ color: colors.text, opacity: 0.7 }}>
             {'Choose Avatar'}
           </Text>
           {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 {avatarList.map((item, index) => {
                   return (
-                    <TouchableScale activeScale={APPLICATION_CONSTANT.SCALE} onPress={()=> {setChoose(item)}} key={index}>
-                      <View style={{marginRight: 10, marginTop: 10}}>
-                      <Image
-                        style={{
-                          width: 75,
-                          height: 75,
-                          borderRadius: 5,
-                          borderWidth: item.id == choose.id ? 3 : 0.7,
-                          borderColor:
-                            item.id == choose.id ? '#41fa7c' : colors.border,
-                        }}
-                        source={{uri: item.url}}
-                      />
-                    </View>
-                      </TouchableScale>
+                    <TouchableScale activeScale={APPLICATION_CONSTANT.SCALE} onPress={() => { setChoose(item) }} key={index}>
+                      <View style={{ marginRight: 10, marginTop: 10 }}>
+                        <Image
+                          style={{
+                            width: 75,
+                            height: 75,
+                            borderRadius: 5,
+                            borderWidth: item.id == choose.id ? 3 : 0.7,
+                            borderColor:
+                              item.id == choose.id ? '#41fa7c' : colors.border,
+                          }}
+                          source={{ uri: item.url }}
+                        />
+                      </View>
+                    </TouchableScale>
                   );
                 })}
               </View>
@@ -174,7 +176,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecure(!secure)}>
             <Ionicons
-              style={{position: 'absolute', right: 10, bottom: 13}}
+              style={{ position: 'absolute', right: 10, bottom: 13 }}
               color={colors.text}
               name={secure ? 'eye' : 'eye-off'}
               size={19}
@@ -192,7 +194,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecureAgain(!secureAgain)}>
             <Ionicons
-              style={{position: 'absolute', right: 10, bottom: 13}}
+              style={{ position: 'absolute', right: 10, bottom: 13 }}
               color={colors.text}
               name={secureAgain ? 'eye' : 'eye-off'}
               size={19}
@@ -211,12 +213,12 @@ const RegisterScreen = props => {
           alignItems: 'center',
           marginTop: 8,
         }}>
-        <Text style={{color: colors.text}}>I have an account, {''}</Text>
+        <Text style={{ color: colors.text }}>I have an account, {''}</Text>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
-          style={{alignItems: 'center'}}>
-          <Text style={{color: colors.primary, fontWeight: 'bold'}}>Login</Text>
+          style={{ alignItems: 'center' }}>
+          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Login</Text>
         </TouchableOpacity>
       </View>
     );
@@ -242,7 +244,7 @@ const RegisterScreen = props => {
       email != '' &&
       name != '' &&
       password !=
-        '' /* && passwordAgain != '' && passwordAgain != '' && fullname != '' && fullname != '' */
+      '' /* && passwordAgain != '' && passwordAgain != '' && fullname != '' && fullname != '' */
     ) {
       if (/* password === passwordAgain */ 1) {
         setLoading(true);
@@ -287,18 +289,20 @@ const RegisterScreen = props => {
     setEmail('');
     setPassword('');
     setPasswordAgain('');
+    setName('')
+    setChoose(0)
   }
 
   function renderEmailVerificationBody() {
     return (
       <ScrollView>
-        <View style={{justifyContent: 'center', marginTop: 40}}>
-          <View style={{paddingHorizontal: 12}}>
+        <View style={{ justifyContent: 'center', marginTop: 40 }}>
+          <View style={{ paddingHorizontal: 12 }}>
             <Image
-              style={{alignSelf: 'center', width: 120, height: 120}}
+              style={{ alignSelf: 'center', width: 120, height: 120 }}
               source={require('../../../../asset/image/verify.png')}
             />
-            <View style={{marginTop: 20}}>
+            <View style={{ marginTop: 20 }}>
               <Text
                 style={{
                   marginBottom: 2,
@@ -326,9 +330,14 @@ const RegisterScreen = props => {
                   color: colors.text,
                   textAlign: 'center',
                 }}>{`To confirm email address,if didn't get a link to your email address`}</Text>
-              <View style={{marginTop: 20}}>
+              <View style={{ marginTop: 20 }}>
                 <AppButtonOnlyText
-                  onPress={() => console.log('open again')}
+                  onPress={() => {
+                    userControl(verify => {
+                      console.log('Control verify' + verify);
+                      setVerify(verify);
+                    });
+                  }}
                   styles={styles.register}
                   text={'Open your mail'}
                   textColor={colors.text}
@@ -340,16 +349,16 @@ const RegisterScreen = props => {
                   alignItems: 'center',
                   marginVertical: 4,
                 }}>
-                <Text style={{marginRight: 5, color: colors.text}}>
+                <Text style={{ marginRight: 5, color: colors.text }}>
                   {'I have account,'}
                 </Text>
                 <TouchableOpacity
-                  onPress={async() => {
+                  onPress={async () => {
                     navigation.navigate('Login'),
-                    await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                      await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
                       auth().currentUser.delete();
                   }}>
-                  <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
                     {'Login'}
                   </Text>
                 </TouchableOpacity>
@@ -360,19 +369,19 @@ const RegisterScreen = props => {
                   alignItems: 'center',
                   marginVertical: 4,
                 }}>
-                <Text style={{marginRight: 5, color: colors.text}}>
+                <Text style={{ marginRight: 5, color: colors.text }}>
                   {'I want to change email address,'}
                 </Text>
                 <TouchableOpacity
                   onPress={async () => {
-                   await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                    await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
                       auth().currentUser.delete(),
                       setSend(0),
                       setSnackbar({
                         visible: false,
                       });
                   }}>
-                  <Text style={{color: colors.primary, fontWeight: 'bold'}}>
+                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
                     {'Register'}
                   </Text>
                 </TouchableOpacity>

@@ -9,25 +9,38 @@ import BaseView from '../../core/base/baseview';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth  from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
+import { StackActions } from '@react-navigation/native';
 
 const Tests = ({}) => {
   const navigation = useNavigation()
+
+  console.log(test());
+
+  function test(){
+    const subscriber = auth().onAuthStateChanged((user)=> console.log('onAuthStateChanged'+JSON.stringify(user)));
+    console.log(subscriber);
+  }
  
   async function signOut() {
     var res = await sharedPref(CacheEnum.Get,CacheList.registerInfo);
     if(res.type == 'Google'){
       console.log("gggg");
       await signOutGoogle((item)=>console.log(item),err=>console.log(err)).then(()=>{
-      navigation.navigate('Login')
+        navigationReset()
       })
 
     }else{
      console.log('emaillllll');
       await emailSignOut(call=>console.log(call),err=>console.log(err)).then(()=>{
-      navigation.navigate('Login')
+      navigationReset()
       })
     }
     // console.log(res);
+  }
+
+  function navigationReset(){
+    navigation.dispatch(
+      StackActions.replace('Login'))
   }
   return (
     <BaseView 

@@ -8,13 +8,12 @@ import {changeTheme} from '../../../redux/actions/base_actions';
 import {useColorScheme} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {APPLICATION_CONSTANT} from '../../constant/app/applicationconstant';
-import auth from '@react-native-firebase/auth'
+
 const Stack = createNativeStackNavigator();
 export const Navigation = props => {
   const scheme = useColorScheme();
   const dispatch = useDispatch();
   React.useEffect(() => {
-    console.log(auth().currentUser);
     GoogleSignin.configure({
       webClientId: APPLICATION_CONSTANT.WEB_CLIENTID,
       client_type: 3,
