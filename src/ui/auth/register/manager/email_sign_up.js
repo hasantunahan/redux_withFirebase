@@ -46,16 +46,21 @@ export async function emailRegister(
     });
 }
 
-export async function emailLogin(email, password, res, err) {
+export async function emailLogin(email, password, res, err,warning) {
   await auth()
     .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      res('Sign in succesfully');
-      sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
-        emailVerified: true,
-        user: getUser(auth().currentUser),
-        type: 'Email',
-      });
+    .then((response) => {
+      console.log(response);
+      if(response.user.emailVerified){
+        res('Sign in succesfully');
+        sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
+          emailVerified: true,
+          user: getUser(auth().currentUser),
+          type: 'Email',
+        });
+      }else{
+        warning('Unverified email,check your email address')
+      }
     })
     .catch(error => {
       err('email or password is wrong');

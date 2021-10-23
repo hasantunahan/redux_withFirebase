@@ -350,7 +350,7 @@ const RegisterScreen = props => {
                   marginVertical: 4,
                 }}>
                 <Text style={{ marginRight: 5, color: colors.text }}>
-                  {'I have account,'}
+                  {'I have account,delete this email'}
                 </Text>
                 <TouchableOpacity
                   onPress={async () => {

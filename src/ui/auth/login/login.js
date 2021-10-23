@@ -309,10 +309,13 @@ const LoginScreen = props => {
       }, err => {
         messageBar(colors.error, err),
           setLoading(false)
+      },wrn=>{
+        setLoading(false),
+        messageBar(colors.warning,wrn)
       })
     } else {
-      messageBar(colors.error, 'email and password dont be empty');
       setLoading(false)
+      messageBar(colors.error, 'email and password dont be empty');
     }
   }
 
