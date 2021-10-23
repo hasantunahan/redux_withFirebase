@@ -1,4 +1,5 @@
 export const Caselist  ={
     user  : 'setUser',
-    theme : 'changeTheme'
+    theme : 'changeTheme',
+    language : 'changeLanguage'
 }

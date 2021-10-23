@@ -43,7 +43,7 @@ const SplashView = props => {
         {open && (
           <View style={{marginTop: 15}}>
             <Text style={{color: colors.text, marginTop: 15}}>
-              {'Loading...'}
+              {props.language.loading}
             </Text>
           </View>
         )}
@@ -53,12 +53,10 @@ const SplashView = props => {
 
   async function didHaveData() {
     let data = await sharedPref(CacheEnum.Get, CacheList.registerInfo);
-    console.log('shared Data' + JSON.stringify(data));
     if (data == null) {
       goPage('Login');
     } else {
       if (!data.emailVerified) {
-        console.log('register email');
         goPage('Register', {email: data.user.email, type: 1});
       } else {
         goPage('Test');
@@ -77,6 +75,7 @@ const SplashView = props => {
 const mapStateToProps = state => {
   return {
     theme: state.base.theme,
+    language :state.base.language
   };
 };
 

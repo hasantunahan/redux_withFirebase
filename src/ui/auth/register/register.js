@@ -24,6 +24,7 @@ import auth from '@react-native-firebase/auth';
 import { sharedPref } from '../../../core/init/cache/cache';
 import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import { avatarList } from './avatarlist/avatar_list';
+import { getLanguage } from '../../../core/extension/lang';
 
 const RegisterScreen = props => {
   const { params } = props.route;
@@ -52,18 +53,14 @@ const RegisterScreen = props => {
       if(verify){
         navigation.navigate('Test');
       }else{
-        console.log('====================================');
         console.log("not login yet");
-        console.log('====================================');
       }
     })
   }, [verify]);
 
   async function control() {
-    console.log("geldim");
     setSend(params.type);
     userControl(verify => {
-      console.log('Control verify' + verify);
       setVerify(verify);
     });
   }
@@ -121,7 +118,7 @@ const RegisterScreen = props => {
       <View style={{ marginTop: 20 }}>
         <View style={{ paddingVertical: 8 }}>
           <Text style={{ color: colors.text, opacity: 0.7 }}>
-            {'Choose Avatar'}
+            {getLanguage().choose.avatar}
           </Text>
           {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -153,7 +150,7 @@ const RegisterScreen = props => {
           style={styles.input}
           value={name}
           onChangeText={val => setName(val)}
-          placeholder="enter name"
+          placeholder={getLanguage().input.name}
           keyboardType="email-address"
           placeholderTextColor={colors.border}
         />
@@ -161,7 +158,7 @@ const RegisterScreen = props => {
           style={styles.input}
           value={email}
           onChangeText={val => setEmail(val)}
-          placeholder="enter email"
+          placeholder={getLanguage().input.email}
           keyboardType="email-address"
           placeholderTextColor={colors.border}
         />
@@ -170,7 +167,7 @@ const RegisterScreen = props => {
             style={styles.input}
             value={password}
             onChangeText={val => setPassword(val)}
-            placeholder="enter password"
+            placeholder={getLanguage().input.password}
             placeholderTextColor={colors.border}
             secureTextEntry={secure}
           />
@@ -188,7 +185,7 @@ const RegisterScreen = props => {
             style={styles.input}
             value={passwordAgain}
             onChangeText={val => setPasswordAgain(val)}
-            placeholder="please enter password again"
+            placeholder={getLanguage().input.password_again}
             placeholderTextColor={colors.border}
             secureTextEntry={secureAgain}
           />
@@ -213,12 +210,12 @@ const RegisterScreen = props => {
           alignItems: 'center',
           marginTop: 8,
         }}>
-        <Text style={{ color: colors.text }}>I have an account, {''}</Text>
+        <Text style={{ color: colors.text }}>{getLanguage().register.i_have_account}</Text>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
           style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Login</Text>
+          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{getLanguage().button.login}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -229,7 +226,7 @@ const RegisterScreen = props => {
       <AppButtonOnlyText
         onPress={() => registerControl()}
         styles={styles.register}
-        text={'Sign Up'}
+        text={getLanguage().button.signup}
         textColor={colors.text}
       />
     );
@@ -263,10 +260,10 @@ const RegisterScreen = props => {
           choose.url
         );
       } else {
-        messageBar(colors.warning, "Passwords don't match");
+        messageBar(colors.warning, getLanguage().register.password_match);
       }
     } else {
-      messageBar(colors.error, 'Required to fill in all blanks');
+      messageBar(colors.error, getLanguage().register.required_all);
     }
   }
 
@@ -311,7 +308,7 @@ const RegisterScreen = props => {
                   fontSize: 18,
                   color: colors.text,
                 }}>
-                {'Check your email addres'}
+                {getLanguage().register.check_email}
               </Text>
               <Text
                 style={{
@@ -329,17 +326,16 @@ const RegisterScreen = props => {
                   alignSelf: 'center',
                   color: colors.text,
                   textAlign: 'center',
-                }}>{`To confirm email address,if didn't get a link to your email address`}</Text>
+                }}>{getLanguage().register.error.dont_get_link}</Text>
               <View style={{ marginTop: 20 }}>
                 <AppButtonOnlyText
                   onPress={() => {
                     userControl(verify => {
-                      console.log('Control verify' + verify);
                       setVerify(verify);
                     });
                   }}
                   styles={styles.register}
-                  text={'Confirm'}
+                  text={getLanguage().button.confirm}
                   textColor={colors.text}
                 />
               </View>
@@ -350,7 +346,7 @@ const RegisterScreen = props => {
                   marginVertical: 4,
                 }}>
                 <Text style={{ marginRight: 5, color: colors.text }}>
-                  {'I have account,delete this email'}
+                  {getLanguage().register.i_have_account_delete}
                 </Text>
                 <TouchableOpacity
                   onPress={async () => {
@@ -359,7 +355,7 @@ const RegisterScreen = props => {
                       auth().currentUser.delete();
                   }}>
                   <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                    {'Login'}
+                    {getLanguage().button.login}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -370,7 +366,7 @@ const RegisterScreen = props => {
                   marginVertical: 4,
                 }}>
                 <Text style={{ marginRight: 5, color: colors.text }}>
-                  {'I want to change email address,'}
+                  {getLanguage().register.want_change_email}
                 </Text>
                 <TouchableOpacity
                   onPress={async () => {
@@ -382,7 +378,7 @@ const RegisterScreen = props => {
                       });
                   }}>
                   <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                    {'Register'}
+                    {getLanguage().button.signup}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -396,6 +392,7 @@ const RegisterScreen = props => {
 const mapStateToProps = state => {
   return {
     theme: state.base.theme,
+    language : state.base.language
   };
 };
 export default connect(mapStateToProps)(RegisterScreen);

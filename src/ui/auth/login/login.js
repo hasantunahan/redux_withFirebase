@@ -22,13 +22,15 @@ import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DividerWithText from '../../_partial/divider/divider_with_text';
 import CustomSnackBar from '../../_partial/snackbar/snackbar';
-import { changeTheme } from '../../../redux/actions/base_actions';
+import { changeLanguage, changeTheme } from '../../../redux/actions/base_actions';
 import { darkTheme } from '../../../core/init/theme/apptheme';
 import AppLogo from '../../_partial/logo/logo';
 import AppButtonOnlyText from '../../../core/components/button';
 import { emailLogin, forgotPasswordEmail } from '../register/manager/email_sign_up';
 import { Icon, Overlay, Text } from 'react-native-elements';
 import { getWidth } from '../../../core/extension/dimension';
+import { tr_label } from '../../../core/init/lang/tr-Tr';
+import { getLanguage } from '../../../core/extension/lang';
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -69,13 +71,16 @@ const LoginScreen = props => {
         <TouchableOpacity onPress={() => dispatch(changeTheme(darkTheme))}>
           <Text style={{ color: colors.text }}>Change Theme</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => dispatch(changeLanguage(tr_label))}>
+          <Text style={{ color: colors.text }}>TR</Text>
+        </TouchableOpacity>
         <ScrollView>
           {renderLogo()}
           <View style={[styles.screen_padding, { marginTop: 40 }]}>
             {renderFormElements()}
             {renderForgotPassword()}
             {renderLoginButton()}
-            <DividerWithText />
+            <DividerWithText text={getLanguage().or} />
             {renderGoogleButton()}
             {renderAccountGoSignUp()}
             {renderLoadingBottom()}
@@ -114,7 +119,7 @@ const LoginScreen = props => {
         clearText()
       } else {
         setLoading(false);
-        messageBar(colors.warning, 'Login canceled');
+        messageBar(colors.warning,getLanguage().login.auth_error.login_canceled);
         clearText()
       }
     });
@@ -137,9 +142,7 @@ const LoginScreen = props => {
           setModalEmail('')
         })
     }else{
-        console.log('====================================');
         console.log("email is required");
-        console.log('====================================');
     }
   }
 
@@ -151,12 +154,12 @@ const LoginScreen = props => {
             style={{ alignSelf: 'center', width: 80, height: 80, marginVertical: 12,resizeMode:'contain' }}
             source={require('../../../../asset/image/lock.png')} />
         </View>
-        <Text h3 style={{ marginBottom: 12, textAlign: 'center', color: colors.text }}>{'Reset Password'}</Text>
+        <Text h3 style={{ marginBottom: 12, textAlign: 'center', color: colors.text }}>{getLanguage().login.reset_password}</Text>
         <TextInput
           style={styles.input}
           value={modalEmail}
           onChangeText={val => setModalEmail(val)}
-          placeholder="enter email"
+          placeholder={getLanguage().input.email}
           keyboardType="email-address"
           placeholderTextColor={colors.border}
         />
@@ -167,7 +170,9 @@ const LoginScreen = props => {
           marginVertical: 8,
           borderRadius: 3
         }} text={'Send mail'} textColor={colors.text} />
-        <Text style={{marginVertical :4,color :colors.text}}>{'We will send a link to your email address, you can reset your password by clicking the link.'}</Text>
+        <Text style={{marginVertical :4,color :colors.text}}>
+          {getLanguage().login.reset_link_waiting}
+          </Text>
       </ScrollView>
     </View>
   }
@@ -175,7 +180,7 @@ const LoginScreen = props => {
   function renderForgotPassword() {
     return <View style={{ alignSelf: 'flex-end', marginVertical: 4 }}>
       <TouchableOpacity onPress={toggleOverlay}>
-        <Text style={{ color: colors.primary }}>{'Forgot Password?'}</Text>
+        <Text style={{ color: colors.primary }}>{getLanguage().login.forgot_password}</Text>
       </TouchableOpacity>
     </View>
   }
@@ -188,8 +193,7 @@ const LoginScreen = props => {
           alignItems: 'center',
           marginTop: 8,
         }}>
-        <Text style={{ color: colors.text }}>Don't have an account yet? </Text>
-
+        <Text style={{ color: colors.text }}>{getLanguage().login.dont_have_account}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('Register', {
             email: '',
@@ -197,7 +201,7 @@ const LoginScreen = props => {
           })}
           style={{ alignItems: 'center' }}>
           <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-            Sign Up
+             {getLanguage().button.signup}
           </Text>
         </TouchableOpacity>
       </View>
@@ -209,7 +213,7 @@ const LoginScreen = props => {
       <AppButtonOnlyText
         onPress={() => formControl()}
         styles={styles.login}
-        text={'Login'}
+        text={getLanguage().button.login}
         textColor={colors.text}
       />
     );
@@ -233,7 +237,7 @@ const LoginScreen = props => {
             source={require('../../../../asset/image/google.png')}
           />
           <Text style={{ color: colors.text, marginLeft: 10 }}>
-            Sign in with Google
+            {getLanguage().button.google}
           </Text>
         </View>
       </TouchableScale>
@@ -247,7 +251,7 @@ const LoginScreen = props => {
           style={styles.input}
           value={email}
           onChangeText={val => setEmail(val)}
-          placeholder="enter email"
+          placeholder={getLanguage().input.email}
           keyboardType="email-address"
           placeholderTextColor={colors.border}
         />
@@ -256,7 +260,7 @@ const LoginScreen = props => {
             style={styles.input}
             value={password}
             onChangeText={val => setPassword(val)}
-            placeholder="enter password"
+            placeholder={getLanguage().input.password}
             placeholderTextColor={colors.border}
             secureTextEntry={secure}
           />
@@ -315,7 +319,7 @@ const LoginScreen = props => {
       })
     } else {
       setLoading(false)
-      messageBar(colors.error, 'email and password dont be empty');
+      messageBar(colors.error, getLanguage().login.auth_error.empty);
     }
   }
 
@@ -342,6 +346,7 @@ const LoginScreen = props => {
 const mapStateToProps = state => {
   return {
     theme: state.base.theme,
+    language : state.base.language
   };
 };
 

@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import { CacheEnum, CacheList } from '../../../../core/constant/cache/cache_enum';
 import { sharedPref } from '../../../../core/init/cache/cache';
+import { getLanguage } from '../../../../core/extension/lang';
 
 function getUser(user) {
   return {
@@ -30,7 +31,7 @@ export async function emailRegister(
           photoURL: url,
         })
         .then(() => {
-          res('User account created & signed in!');
+          res(getLanguage().auth_create.success);
           call(1);
           sharedPref(CacheEnum.Set, CacheList.registerInfo, {
             emailVerified: false,
@@ -52,18 +53,18 @@ export async function emailLogin(email, password, res, err,warning) {
     .then((response) => {
       console.log(response);
       if(response.user.emailVerified){
-        res('Sign in succesfully');
+        res(getLanguage().login.success);
         sharedPref(CacheEnum.Merge, CacheList.registerInfo, {
           emailVerified: true,
           user: getUser(auth().currentUser),
           type: 'Email',
         });
       }else{
-        warning('Unverified email,check your email address')
+        warning(getLanguage().login.unverify)
       }
     })
     .catch(error => {
-      err('email or password is wrong');
+      err(getLanguage().login.auth_error.email_password);
     });
 }
 
@@ -71,7 +72,7 @@ export async function emailSignOut(error, callback) {
   await auth()
     .signOut()
     .then(() => {
-      callback('User sign out email'),
+      callback(getLanguage().login.info.email_signout),
       sharedPref(CacheEnum.Remove, CacheList.registerInfo)
     })
     .catch(err => error(err));
@@ -82,7 +83,7 @@ async function sendEmail(verify, call) {
     .currentUser.sendEmailVerification()
     .then(() => {
       console.log(
-        'Waiting for verification. Check your email!\nYou can close this verification and came back later',
+       getLanguage().login.verify_waiting
       );
     })
     .catch(() => {
@@ -92,14 +93,13 @@ async function sendEmail(verify, call) {
 
 export async function forgotPasswordEmail(email,response,error){
      await auth().sendPasswordResetEmail(email).then((res)=>{
-        response('Send link to email successfuly')
+        response(getLanguage().login.send_link_success)
       }).catch(err=>{
-        error('Warning! Didn\'t send link')
+        error(getLanguage().login.send_link_error)
       })
 }
 
 export async function userControl(verify) {
-    console.log('res içerde');
     if(auth().currentUser != null){
       auth().currentUser.reload().then(()=>{
         auth().onAuthStateChanged((user)=> {
@@ -148,12 +148,12 @@ export async function userControl(verify) {
 
 function registerError(error, err) {
   if (error.code === 'auth/email-already-in-use') {
-    err('That email address is already in use!');
+    err(getLanguage().register.error.email_already);
   }
   if (error.code === 'auth/invalid-email') {
-    err('That email address is invalid!');
+    err(getLanguage().register.error.invalid_email);
   }
   if (error.code === 'auth/weak-password') {
-    err('Password at least 6 characters');
+    err(getLanguage().register.error.weak_password);
   }
 }
