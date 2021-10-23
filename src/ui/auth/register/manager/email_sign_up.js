@@ -85,9 +85,15 @@ async function sendEmail(verify, call) {
     });
 }
 
+export async function forgotPasswordEmail(email,response,error){
+     await auth().sendPasswordResetEmail(email).then((res)=>{
+        response('Send link to email successfuly')
+      }).catch(err=>{
+        error('Warning! Didn\'t send link')
+      })
+}
+
 export async function userControl(verify) {
-
-
     console.log('res içerde');
     if(auth().currentUser != null){
       auth().currentUser.reload().then(()=>{
@@ -110,9 +116,7 @@ export async function userControl(verify) {
       })
     }
 
-    
     /* 
-
     auth().onUserChanged(response => {
       console.log('====================================');
       console.log('onuserchange :');

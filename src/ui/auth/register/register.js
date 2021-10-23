@@ -339,7 +339,7 @@ const RegisterScreen = props => {
                     });
                   }}
                   styles={styles.register}
-                  text={'Open your mail'}
+                  text={'Confirm'}
                   textColor={colors.text}
                 />
               </View>

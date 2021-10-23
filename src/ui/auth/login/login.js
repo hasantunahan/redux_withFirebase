@@ -1,12 +1,13 @@
 import React from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   Image,
   ScrollView,
   TextInput,
   ActivityIndicator,
+  StatusBar,
+  SegmentedControlIOSBase,
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import BaseView from '../../../core/base/baseview';
@@ -25,7 +26,9 @@ import { changeTheme } from '../../../redux/actions/base_actions';
 import { darkTheme } from '../../../core/init/theme/apptheme';
 import AppLogo from '../../_partial/logo/logo';
 import AppButtonOnlyText from '../../../core/components/button';
-import { emailLogin } from '../register/manager/email_sign_up';
+import { emailLogin, forgotPasswordEmail } from '../register/manager/email_sign_up';
+import { Icon, Overlay, Text } from 'react-native-elements';
+import { getWidth } from '../../../core/extension/dimension';
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -41,6 +44,12 @@ const LoginScreen = props => {
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
+  const [modalEmail, setModalEmail] = React.useState('')
+
+  const toggleOverlay = () => {
+    setModal(!modal)
+  }
 
   return (
     <BaseView
@@ -53,6 +62,7 @@ const LoginScreen = props => {
     />
   );
 
+
   function renderLogin() {
     return (
       <View style={styles.main}>
@@ -63,11 +73,23 @@ const LoginScreen = props => {
           {renderLogo()}
           <View style={[styles.screen_padding, { marginTop: 40 }]}>
             {renderFormElements()}
+            {renderForgotPassword()}
             {renderLoginButton()}
             <DividerWithText />
             {renderGoogleButton()}
             {renderAccountGoSignUp()}
             {renderLoadingBottom()}
+            <Overlay overlayStyle={{ backgroundColor: colors.background }} fullScreen isVisible={modal} onBackdropPress={toggleOverlay}>
+              <View style={{ position: 'absolute', right: 12, top: 40 }}>
+                <Icon
+                  name='close'
+                  type='antdesign'
+                  color={colors.text}
+                  onPress={toggleOverlay}
+                />
+              </View>
+              {renderForgotModal()}
+            </Overlay>
           </View>
         </ScrollView>
         <CustomSnackBar
@@ -78,6 +100,9 @@ const LoginScreen = props => {
       </View>
     );
   }
+
+
+
 
   async function signGoogle() {
     setLoading(true);
@@ -95,6 +120,66 @@ const LoginScreen = props => {
     });
   }
 
+  async function sendControl(){
+    if(modalEmail != null && modalEmail != ''){
+        await forgotPasswordEmail(modalEmail,res=>{
+            setModal(false),
+            setTimeout(() => {
+               messageBar(colors.success,res)
+            }, 200);
+           
+        },err=> {
+          setModal(false),
+            setTimeout(() => {
+               messageBar(colors.error,err)
+            }, 200);
+        }).then(()=>{
+          setModalEmail('')
+        })
+    }else{
+        console.log('====================================');
+        console.log("email is required");
+        console.log('====================================');
+    }
+  }
+
+  function renderForgotModal() {
+    return <View style={{width: getWidth() * .9, alignSelf: 'center', marginTop: 60 }}>
+      <ScrollView>
+        <View>
+          <Image
+            style={{ alignSelf: 'center', width: 80, height: 80, marginVertical: 12,resizeMode:'contain' }}
+            source={require('../../../../asset/image/lock.png')} />
+        </View>
+        <Text h3 style={{ marginBottom: 12, textAlign: 'center', color: colors.text }}>{'Reset Password'}</Text>
+        <TextInput
+          style={styles.input}
+          value={modalEmail}
+          onChangeText={val => setModalEmail(val)}
+          placeholder="enter email"
+          keyboardType="email-address"
+          placeholderTextColor={colors.border}
+        />
+        <AppButtonOnlyText onPress={() => sendControl()} styles={{
+          backgroundColor: colors.primary,
+          padding: 8,
+          alignItems: 'center',
+          marginVertical: 8,
+          borderRadius: 3
+        }} text={'Send mail'} textColor={colors.text} />
+        <Text style={{marginVertical :4,color :colors.text}}>{'We will send a link to your email address, you can reset your password by clicking the link.'}</Text>
+      </ScrollView>
+    </View>
+  }
+
+  function renderForgotPassword() {
+    return <View style={{ alignSelf: 'flex-end', marginVertical: 4 }}>
+      <TouchableOpacity onPress={toggleOverlay}>
+        <Text style={{ color: colors.primary }}>{'Forgot Password?'}</Text>
+      </TouchableOpacity>
+    </View>
+  }
+
   function renderAccountGoSignUp() {
     return (
       <View
@@ -107,9 +192,9 @@ const LoginScreen = props => {
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Register', {
-            email :'',
-            type :0
-        })}
+            email: '',
+            type: 0
+          })}
           style={{ alignItems: 'center' }}>
           <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
             Sign Up
@@ -220,10 +305,10 @@ const LoginScreen = props => {
             navigation.navigate('Test')
           }, 250),
           setLoading(false)
-         clearText()
+        clearText()
       }, err => {
         messageBar(colors.error, err),
-        setLoading(false)
+          setLoading(false)
       })
     } else {
       messageBar(colors.error, 'email and password dont be empty');
@@ -246,7 +331,7 @@ const LoginScreen = props => {
     }, 3000);
   }
 
-  function clearText(){
+  function clearText() {
     setEmail('')
     setPassword('')
   }
