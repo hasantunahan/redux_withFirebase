@@ -63,15 +63,30 @@ const LoginScreen = props => {
       }
     />
   );
+  
+  async function themesChanges(){
+    await sharedPref(CacheEnum.Merge,CacheList.theme,{
+       theme :'dark'
+    }).then(()=>{
+      dispatch(changeTheme(darkTheme))      
+    })
+  }
 
+  async function languagesChanges(){
+    await sharedPref(CacheEnum.Merge,CacheList.lang,{
+      lang : 'tr'
+   }).then(()=>{
+    dispatch(changeLanguage(tr_label))
+   })
+  }
 
   function renderLogin() {
     return (
       <View style={styles.main}>
-        <TouchableOpacity onPress={() => dispatch(changeTheme(darkTheme))}>
+        <TouchableOpacity onPress={async () => await themesChanges()}>
           <Text style={{ color: colors.text }}>Change Theme</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => dispatch(changeLanguage(tr_label))}>
+        <TouchableOpacity onPress={async () => await languagesChanges()}>
           <Text style={{ color: colors.text }}>TR</Text>
         </TouchableOpacity>
         <ScrollView>
@@ -88,7 +103,7 @@ const LoginScreen = props => {
               <View style={{ position: 'absolute', right: 12, top: 40 }}>
                 <Icon
                   name='close'
-                  type='antdesign'
+                  type='ionicon'
                   color={colors.text}
                   onPress={toggleOverlay}
                 />

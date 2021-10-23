@@ -7,5 +7,7 @@ export const CacheEnum = {
 
 export const CacheList = {
   user: 'User',
-  registerInfo: 'registerInfo'
+  registerInfo: 'registerInfo',
+  lang: 'Language',
+  theme: 'Theme'
 };

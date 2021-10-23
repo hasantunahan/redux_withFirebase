@@ -2,18 +2,21 @@ import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {View, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
-import BaseView from '../../../../core/base/baseview';
-import ThemeProvider from '../../../../core/init/theme/theme_provider';
-import {CacheEnum, CacheList} from '../../../../core/constant/cache/cache_enum';
-import {sharedGetAllKey, sharedPref} from '../../../../core/init/cache/cache';
+import BaseView from '../../../core/base/baseview';
+import ThemeProvider from '../../../core/init/theme/theme_provider';
+import {CacheEnum, CacheList} from '../../../core/constant/cache/cache_enum';
+import {sharedGetAllKey, sharedPref} from '../../../core/init/cache/cache';
+import SplashManager from './manager/splashmanager';
 
 const SplashView = props => {
+  const manage = SplashManager()
   const navigation = useNavigation();
   const [open, setOpen] = React.useState(true);
   const colors = ThemeProvider(props.theme.colors);
 
   React.useEffect(() => {
     didHaveData();
+    console.log(manage);
   }, []);
 
   return (
@@ -32,12 +35,12 @@ const SplashView = props => {
         {props.theme.dark ? (
           <Image
             style={{width: 100, height: 40}}
-            source={require('../../../../../asset/image/logo_dark.png')}
+            source={require('../../../../asset/image/logo_dark.png')}
           />
         ) : (
           <Image
             style={{width: 100, height: 40}}
-            source={require('../../../../../asset/image/logo_light.png')}
+            source={require('../../../../asset/image/logo_light.png')}
           />
         )}
         {open && (

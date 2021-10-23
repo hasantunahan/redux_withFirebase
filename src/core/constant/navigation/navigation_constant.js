@@ -1,7 +1,7 @@
 import LoginScreen from '../../../ui/auth/login/login';
-import SplashView from '../../../ui/auth/login/splash/splash';
 import RegisterScreen from '../../../ui/auth/register/register';
 import Tests from '../../../ui/test/tests';
+import SplashView from '../../../ui/auth/splash/splash';
 
 export var NavigationList = [
   {
