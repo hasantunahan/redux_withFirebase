@@ -5,9 +5,7 @@ import {
   Image,
   ScrollView,
   TextInput,
-  ActivityIndicator,
-  StatusBar,
-  SegmentedControlIOSBase,
+  ActivityIndicator
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import BaseView from '../../../core/base/baseview';
@@ -28,7 +26,6 @@ import AppLogo from '../../_partial/logo/logo';
 import AppButtonOnlyText from '../../../core/components/button';
 import { emailLogin, forgotPasswordEmail } from '../register/manager/email_sign_up';
 import { Icon, Overlay, Text } from 'react-native-elements';
-import { getWidth } from '../../../core/extension/dimension';
 import { tr_label } from '../../../core/init/lang/tr-Tr';
 import { getLanguage } from '../../../core/extension/lang';
 
@@ -63,22 +60,6 @@ const LoginScreen = props => {
       }
     />
   );
-  
-  async function themesChanges(){
-    await sharedPref(CacheEnum.Merge,CacheList.theme,{
-       theme :'dark'
-    }).then(()=>{
-      dispatch(changeTheme(darkTheme))      
-    })
-  }
-
-  async function languagesChanges(){
-    await sharedPref(CacheEnum.Merge,CacheList.lang,{
-      lang : 'tr'
-   }).then(()=>{
-    dispatch(changeLanguage(tr_label))
-   })
-  }
 
   function renderLogin() {
     return (
@@ -99,17 +80,7 @@ const LoginScreen = props => {
             {renderGoogleButton()}
             {renderAccountGoSignUp()}
             {renderLoadingBottom()}
-            <Overlay overlayStyle={{ backgroundColor: colors.background }} fullScreen isVisible={modal} onBackdropPress={toggleOverlay}>
-              <View style={{ position: 'absolute', right: 12, top: 40 }}>
-                <Icon
-                  name='close'
-                  type='ionicon'
-                  color={colors.text}
-                  onPress={toggleOverlay}
-                />
-              </View>
-              {renderForgotModal()}
-            </Overlay>
+            {renderOverlay()}
           </View>
         </ScrollView>
         <CustomSnackBar
@@ -118,144 +89,6 @@ const LoginScreen = props => {
           isDismiss={snackbar.visible}
         />
       </View>
-    );
-  }
-
-
-
-
-  async function signGoogle() {
-    setLoading(true);
-    await onGoogleButtonPress().then(async val => {
-      if (val.error == null) {
-        setLoading(false);
-        await sharedPref(CacheEnum.Set, CacheList.user, val);
-        navigation.navigate('Test');
-        clearText()
-      } else {
-        setLoading(false);
-        messageBar(colors.warning,getLanguage().login.auth_error.login_canceled);
-        clearText()
-      }
-    });
-  }
-
-  async function sendControl(){
-    if(modalEmail != null && modalEmail != ''){
-        await forgotPasswordEmail(modalEmail,res=>{
-            setModal(false),
-            setTimeout(() => {
-               messageBar(colors.success,res)
-            }, 200);
-           
-        },err=> {
-          setModal(false),
-            setTimeout(() => {
-               messageBar(colors.error,err)
-            }, 200);
-        }).then(()=>{
-          setModalEmail('')
-        })
-    }else{
-        console.log("email is required");
-    }
-  }
-
-  function renderForgotModal() {
-    return <View style={{width: getWidth() * .9, alignSelf: 'center', marginTop: 60 }}>
-      <ScrollView>
-        <View>
-          <Image
-            style={{ alignSelf: 'center', width: 80, height: 80, marginVertical: 12,resizeMode:'contain' }}
-            source={require('../../../../asset/image/lock.png')} />
-        </View>
-        <Text h3 style={{ marginBottom: 12, textAlign: 'center', color: colors.text }}>{getLanguage().login.reset_password}</Text>
-        <TextInput
-          style={styles.input}
-          value={modalEmail}
-          onChangeText={val => setModalEmail(val)}
-          placeholder={getLanguage().input.email}
-          keyboardType="email-address"
-          placeholderTextColor={colors.border}
-        />
-        <AppButtonOnlyText onPress={() => sendControl()} styles={{
-          backgroundColor: colors.primary,
-          padding: 8,
-          alignItems: 'center',
-          marginVertical: 8,
-          borderRadius: 3
-        }} text={'Send mail'} textColor={colors.text} />
-        <Text style={{marginVertical :4,color :colors.text}}>
-          {getLanguage().login.reset_link_waiting}
-          </Text>
-      </ScrollView>
-    </View>
-  }
-
-  function renderForgotPassword() {
-    return <View style={{ alignSelf: 'flex-end', marginVertical: 4 }}>
-      <TouchableOpacity onPress={toggleOverlay}>
-        <Text style={{ color: colors.primary }}>{getLanguage().login.forgot_password}</Text>
-      </TouchableOpacity>
-    </View>
-  }
-
-  function renderAccountGoSignUp() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 8,
-        }}>
-        <Text style={{ color: colors.text }}>{getLanguage().login.dont_have_account}</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Register', {
-            email: '',
-            type: 0
-          })}
-          style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-             {getLanguage().button.signup}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  function renderLoginButton() {
-    return (
-      <AppButtonOnlyText
-        onPress={() => formControl()}
-        styles={styles.login}
-        text={getLanguage().button.login}
-        textColor={colors.text}
-      />
-    );
-  }
-
-  function renderGoogleButton() {
-    return (
-      <TouchableScale
-        style={{
-          alignItems: 'center',
-          marginVertical: 12,
-          backgroundColor: colors.change,
-          padding: 8,
-          borderRadius: 3,
-        }}
-        activeScale={APPLICATION_CONSTANT.SCALE}
-        onPress={async () => await signGoogle()}>
-        <View style={styles.textwithimage}>
-          <Image
-            style={{ width: 20, height: 20, marginLeft: 10 }}
-            source={require('../../../../asset/image/google.png')}
-          />
-          <Text style={{ color: colors.text, marginLeft: 10 }}>
-            {getLanguage().button.google}
-          </Text>
-        </View>
-      </TouchableScale>
     );
   }
 
@@ -281,7 +114,7 @@ const LoginScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecure(!secure)}>
             <Ionicons
-              style={{ position: 'absolute', right: 10, bottom: 13 }}
+              style={styles.eye}
               color={colors.text}
               name={secure ? 'eye' : 'eye-off'}
               size={19}
@@ -289,6 +122,61 @@ const LoginScreen = props => {
           </TouchableOpacity>
         </View>
       </View>
+    );
+  }
+
+  function renderForgotPassword() {
+    return <View style={styles.forgot_view}>
+      <TouchableOpacity onPress={toggleOverlay}>
+        <Text style={styles.forgot_text}>{getLanguage().login.forgot_password}</Text>
+      </TouchableOpacity>
+    </View>
+  }
+
+  function renderAccountGoSignUp() {
+    return (
+      <View style={styles.signup_view}>
+        <Text style={styles.sign_up_prefix}>{getLanguage().login.dont_have_account}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Register', {
+            email: '',
+            type: 0
+          })}
+          style={styles.align_center}>
+          <Text style={styles.signup_focus_text}>
+            {getLanguage().button.signup}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function renderLoginButton() {
+    return (
+      <AppButtonOnlyText
+        onPress={() => formControl()}
+        styles={styles.login}
+        text={getLanguage().button.login}
+        textColor={colors.text}
+      />
+    );
+  }
+
+  function renderGoogleButton() {
+    return (
+      <TouchableScale style={styles.google_button}
+        activeScale={APPLICATION_CONSTANT.SCALE}
+        onPress={async () => await signGoogle()}>
+        <View style={styles.textwithimage}>
+          <Image
+            style={styles.google_ico}
+            source={require('../../../../asset/image/google.png')}
+          />
+          <Text style={styles.google_text}>
+            {getLanguage().button.google}
+          </Text>
+        </View>
+      </TouchableScale>
     );
   }
 
@@ -310,6 +198,50 @@ const LoginScreen = props => {
     );
   }
 
+  function renderOverlay() {
+    return <Overlay overlayStyle={styles.overlay_main}
+      fullScreen
+      isVisible={modal}
+      onBackdropPress={toggleOverlay}>
+      <View style={styles.overlay_view}>
+        <Icon
+          name='close'
+          type='ionicon'
+          color={colors.text}
+          onPress={toggleOverlay}
+        />
+      </View>
+      {renderForgotModal()}
+    </Overlay>
+  }
+
+  function renderForgotModal() {
+    return <View style={styles.overlay_back}>
+      <ScrollView>
+        <View>
+          <Image
+            style={styles.overlay_bigIcon}
+            source={require('../../../../asset/image/lock.png')} />
+        </View>
+        <Text h3 style={styles.overlay_title}>{getLanguage().login.reset_password}</Text>
+        <TextInput
+          style={styles.input}
+          value={modalEmail}
+          onChangeText={val => setModalEmail(val)}
+          placeholder={getLanguage().input.email}
+          keyboardType="email-address"
+          placeholderTextColor={colors.border}
+        />
+        <AppButtonOnlyText onPress={() => sendControl()}
+          styles={styles.overlay_button} text={getLanguage().send_mail}
+          textColor={colors.text} />
+        <Text style={styles.overlay_info}>
+          {getLanguage().login.reset_link_waiting}
+        </Text>
+      </ScrollView>
+    </View>
+  }
+
   function formControl() {
     setLoading(true)
     if (
@@ -328,9 +260,9 @@ const LoginScreen = props => {
       }, err => {
         messageBar(colors.error, err),
           setLoading(false)
-      },wrn=>{
+      }, wrn => {
         setLoading(false),
-        messageBar(colors.warning,wrn)
+          messageBar(colors.warning, wrn)
       })
     } else {
       setLoading(false)
@@ -353,6 +285,62 @@ const LoginScreen = props => {
     }, 3000);
   }
 
+
+  async function themesChanges() {
+    await sharedPref(CacheEnum.Merge, CacheList.theme, {
+      theme: 'dark'
+    }).then(() => {
+      dispatch(changeTheme(darkTheme))
+    })
+  }
+
+  async function languagesChanges() {
+    await sharedPref(CacheEnum.Merge, CacheList.lang, {
+      lang: 'tr'
+    }).then(() => {
+      dispatch(changeLanguage(tr_label))
+    })
+  }
+
+
+  async function signGoogle() {
+    setLoading(true);
+    await onGoogleButtonPress().then(async val => {
+      if (val.error == null) {
+        setLoading(false);
+        await sharedPref(CacheEnum.Set, CacheList.user, val);
+        navigation.navigate('Test');
+        clearText()
+      } else {
+        setLoading(false);
+        messageBar(colors.warning, getLanguage().login.auth_error.login_canceled);
+        clearText()
+      }
+    });
+  }
+
+  async function sendControl() {
+    if (modalEmail != null && modalEmail != '') {
+      await forgotPasswordEmail(modalEmail, res => {
+        setModal(false),
+          setTimeout(() => {
+            messageBar(colors.success, res)
+          }, 200);
+
+      }, err => {
+        setModal(false),
+          setTimeout(() => {
+            messageBar(colors.error, err)
+          }, 200);
+      }).then(() => {
+        setModalEmail('')
+      })
+    } else {
+      console.log("email is required");
+    }
+  }
+
+
   function clearText() {
     setEmail('')
     setPassword('')
@@ -361,7 +349,7 @@ const LoginScreen = props => {
 const mapStateToProps = state => {
   return {
     theme: state.base.theme,
-    language : state.base.language
+    language: state.base.language
   };
 };
 

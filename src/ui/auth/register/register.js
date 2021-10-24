@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import BaseView from '../../../core/base/baseview';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
 import ThemeProvider from '../../../core/init/theme/theme_provider';
 import { RegisterStyle } from './style/style';
@@ -36,7 +36,6 @@ const RegisterScreen = props => {
   const navigation = useNavigation();
   const colors = ThemeProvider(props.theme.colors);
   const styles = RegisterStyle(colors);
-  const dispatch = useDispatch();
   const [secure, setSecure] = React.useState(true);
   const [secureAgain, setSecureAgain] = React.useState(true);
   const [password, setPassword] = React.useState('');
@@ -49,21 +48,14 @@ const RegisterScreen = props => {
   const [choose, setChoose] = React.useState({});
 
   React.useEffect(() => {
-    control().then(()=>{
-      if(verify){
+    control().then(() => {
+      if (verify) {
         navigation.navigate('Test');
-      }else{
+      } else {
         console.log("not login yet");
       }
     })
   }, [verify]);
-
-  async function control() {
-    setSend(params.type);
-    userControl(verify => {
-      setVerify(verify);
-    });
-  }
 
   return (
     <BaseView
@@ -97,6 +89,78 @@ const RegisterScreen = props => {
     );
   }
 
+  function renderEmailVerificationBody() {
+    return (
+      <ScrollView>
+        <View style={styles.verify_body}>
+          <View style={styles.verify_h_padding}>
+            <Image
+              style={styles.verify_img}
+              source={require('../../../../asset/image/verify.png')}
+            />
+            <View style={{ marginTop: 20 }}>
+              <Text style={styles.verify_title}>
+                {getLanguage().register.check_email}
+              </Text>
+              <Text style={styles.verify_email}>
+                {params.email ? params.email : email}
+              </Text>
+              <Text
+                style={styles.verify_dont}>
+                {getLanguage().register.error.dont_get_link}
+              </Text>
+              <View style={{ marginTop: 20 }}>
+                <AppButtonOnlyText
+                  onPress={() => {
+                    userControl(verify => {
+                      setVerify(verify);
+                    });
+                  }}
+                  styles={styles.register}
+                  text={getLanguage().button.confirm}
+                  textColor={colors.text}
+                />
+              </View>
+              <View style={styles.verify_direc_view}>
+                <Text style={styles.verify_pre_text}>
+                  {getLanguage().register.i_have_account_delete}
+                </Text>
+                <TouchableOpacity
+                  onPress={async () => {
+                    navigation.navigate('Login'),
+                      await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                      auth().currentUser.delete();
+                  }}>
+                  <Text style={styles.verify_focus_text}>
+                    {getLanguage().button.login}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.verify_direc_view}>
+                <Text style={styles.verify_pre_text}>
+                  {getLanguage().register.want_change_email}
+                </Text>
+                <TouchableOpacity
+                  onPress={async () => {
+                    await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
+                      auth().currentUser.delete(),
+                      setSend(0),
+                      setSnackbar({
+                        visible: false,
+                      });
+                  }}>
+                  <Text style={styles.verify_focus_text}>
+                    {getLanguage().button.signup}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+
   function renderLoading() {
     return (
       <View style={{ alignItems: 'center', marginTop: 25 }}>
@@ -107,7 +171,7 @@ const RegisterScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={{ alignItems: 'center', marginTop: 30 }}>
+      <View style={styles.logo}>
         <AppLogo isDark={props.theme.dark} />
       </View>
     );
@@ -117,7 +181,7 @@ const RegisterScreen = props => {
     return (
       <View style={{ marginTop: 20 }}>
         <View style={{ paddingVertical: 8 }}>
-          <Text style={{ color: colors.text, opacity: 0.7 }}>
+          <Text style={styles.form_info}>
             {getLanguage().choose.avatar}
           </Text>
           {
@@ -126,16 +190,12 @@ const RegisterScreen = props => {
                 {avatarList.map((item, index) => {
                   return (
                     <TouchableScale activeScale={APPLICATION_CONSTANT.SCALE} onPress={() => { setChoose(item) }} key={index}>
-                      <View style={{ marginRight: 10, marginTop: 10 }}>
+                      <View style={styles.avatar_view}>
                         <Image
-                          style={{
-                            width: 75,
-                            height: 75,
-                            borderRadius: 5,
-                            borderWidth: item.id == choose.id ? 3 : 0.7,
-                            borderColor:
-                              item.id == choose.id ? '#41fa7c' : colors.border,
-                          }}
+                          style={[styles.choose_img, {
+                            borderWidth: item.id == choose.id ? 4 : 0.7,
+                            borderColor: item.id == choose.id ? colors.primary : colors.border,
+                          }]}
                           source={{ uri: item.url }}
                         />
                       </View>
@@ -173,7 +233,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecure(!secure)}>
             <Ionicons
-              style={{ position: 'absolute', right: 10, bottom: 13 }}
+              style={styles.eye}
               color={colors.text}
               name={secure ? 'eye' : 'eye-off'}
               size={19}
@@ -191,7 +251,7 @@ const RegisterScreen = props => {
           />
           <TouchableOpacity onPress={() => setSecureAgain(!secureAgain)}>
             <Ionicons
-              style={{ position: 'absolute', right: 10, bottom: 13 }}
+              style={styles.eye}
               color={colors.text}
               name={secureAgain ? 'eye' : 'eye-off'}
               size={19}
@@ -204,18 +264,12 @@ const RegisterScreen = props => {
 
   function renderHaveAccunt() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 8,
-        }}>
+      <View style={styles.have_account}>
         <Text style={{ color: colors.text }}>{getLanguage().register.i_have_account}</Text>
-
         <TouchableOpacity
           onPress={() => navigation.navigate('Login')}
-          style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{getLanguage().button.login}</Text>
+          style={styles.align_center}>
+          <Text style={styles.text_button}>{getLanguage().button.login}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -232,6 +286,13 @@ const RegisterScreen = props => {
     );
   }
 
+  async function control() {
+    setSend(params.type);
+    userControl(verify => {
+      setVerify(verify);
+    });
+  }
+
   async function registerControl() {
     if (
       choose != 0 &&
@@ -240,10 +301,11 @@ const RegisterScreen = props => {
       name.length > 0 &&
       email != '' &&
       name != '' &&
-      password !=
-      '' /* && passwordAgain != '' && passwordAgain != '' && fullname != '' && fullname != '' */
+      password != '' &&
+      passwordAgain != '' &&
+      passwordAgain != ''
     ) {
-      if (/* password === passwordAgain */ 1) {
+      if (password === passwordAgain) {
         setLoading(true);
         emailRegister(
           email,
@@ -290,109 +352,11 @@ const RegisterScreen = props => {
     setChoose(0)
   }
 
-  function renderEmailVerificationBody() {
-    return (
-      <ScrollView>
-        <View style={{ justifyContent: 'center', marginTop: 40 }}>
-          <View style={{ paddingHorizontal: 12 }}>
-            <Image
-              style={{ alignSelf: 'center', width: 120, height: 120 }}
-              source={require('../../../../asset/image/verify.png')}
-            />
-            <View style={{ marginTop: 20 }}>
-              <Text
-                style={{
-                  marginBottom: 2,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  fontSize: 18,
-                  color: colors.text,
-                }}>
-                {getLanguage().register.check_email}
-              </Text>
-              <Text
-                style={{
-                  color: colors.primary,
-                  fontWeight: '500',
-                  textAlign: 'center',
-                }}>
-                {params.email ? params.email : email}
-              </Text>
-              <Text
-                style={{
-                  fontWeight: '400',
-                  marginTop: 20,
-                  width: '80%',
-                  alignSelf: 'center',
-                  color: colors.text,
-                  textAlign: 'center',
-                }}>{getLanguage().register.error.dont_get_link}</Text>
-              <View style={{ marginTop: 20 }}>
-                <AppButtonOnlyText
-                  onPress={() => {
-                    userControl(verify => {
-                      setVerify(verify);
-                    });
-                  }}
-                  styles={styles.register}
-                  text={getLanguage().button.confirm}
-                  textColor={colors.text}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: 4,
-                }}>
-                <Text style={{ marginRight: 5, color: colors.text }}>
-                  {getLanguage().register.i_have_account_delete}
-                </Text>
-                <TouchableOpacity
-                  onPress={async () => {
-                    navigation.navigate('Login'),
-                      await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
-                      auth().currentUser.delete();
-                  }}>
-                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                    {getLanguage().button.login}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: 4,
-                }}>
-                <Text style={{ marginRight: 5, color: colors.text }}>
-                  {getLanguage().register.want_change_email}
-                </Text>
-                <TouchableOpacity
-                  onPress={async () => {
-                    await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
-                      auth().currentUser.delete(),
-                      setSend(0),
-                      setSnackbar({
-                        visible: false,
-                      });
-                  }}>
-                  <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-                    {getLanguage().button.signup}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
 };
 const mapStateToProps = state => {
   return {
     theme: state.base.theme,
-    language : state.base.language
+    language: state.base.language
   };
 };
 export default connect(mapStateToProps)(RegisterScreen);

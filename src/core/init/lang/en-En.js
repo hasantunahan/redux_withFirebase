@@ -9,6 +9,7 @@ export const en_label = {
     auth_create :{
         success :'User account created & signed in!'
     },
+    send_mail :'Send Mail',
     register :{
         error : {
             email_already : 'That email address is already in use!',

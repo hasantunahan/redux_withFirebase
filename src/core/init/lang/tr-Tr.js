@@ -9,6 +9,7 @@ export const tr_label = {
     auth_create: {
         success: 'Kullanıcı oluşturuldu'
     },
+    send_mail :'Mail Gönder',
     register: {
         error: {
             email_already: 'Bu email adresi kullanılıyor!',

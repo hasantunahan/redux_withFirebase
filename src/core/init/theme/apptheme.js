@@ -1,10 +1,10 @@
 export const lightTheme = {
     dark: false,
     colors: {
-        primary: '#81A5F3',
+        primary: '#54C98E',
         background: '#F5F5F5',
-        card: '#E7E7E7',
-        text: '#252525',
+        card: '#EDEDED',
+        text: '#3D3D3D',
         border: '#7E7E7E',
         notification: '#F04E84',
         change: '#FFFFFF',
@@ -19,11 +19,11 @@ export const lightTheme = {
 export const darkTheme = {
     dark: true,
     colors: {
-        primary: '#1E4085',
-        background: '#070A11',
-        card: '#1B2135',
-        text: '#ffefff',
-        border: '#73819E',
+        primary: '#209E5F',
+        background: '#080808',
+        card: '#444444',
+        text: '#FFFFFF',
+        border: '#EDEDED',
         notification: '#9E234C',
         change: '#252525',
         error : '#CF3640',
@@ -33,3 +33,41 @@ export const darkTheme = {
     },
     statusbar: 'light-content'
 };
+
+//REd PALETTE
+/* export const lightTheme = {
+    dark: false,
+    colors: {
+        primary: '#FA6087',
+        background: '#F5F5F5',
+        card: '#EDEDED',
+        text: '#3D3D3D',
+        border: '#7E7E7E',
+        notification: '#F04E84',
+        change: '#FFFFFF',
+        error : '#CF3640',
+        success :'#37A568',
+        warning :'#F0943E',
+        info : '#70CDEC'
+    },
+    statusbar: 'dark-content'
+};
+
+export const darkTheme = {
+    dark: true,
+    colors: {
+        primary: '#DA0037',
+        background: '#171717',
+        card: '#444444',
+        text: '#FFFFFF',
+        border: '#EDEDED',
+        notification: '#9E234C',
+        change: '#252525',
+        error : '#CF3640',
+        success :'#37A568',
+        warning :'#F0943E',
+        info : '#70CDEC'
+    },
+    statusbar: 'light-content'
+};
+ */
