@@ -25,6 +25,7 @@ import { sharedPref } from '../../../core/init/cache/cache';
 import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import { avatarList } from './avatarlist/avatar_list';
 import { getLanguage } from '../../../core/extension/lang';
+import LottieView from 'lottie-react-native'
 
 const RegisterScreen = props => {
   const { params } = props.route;
@@ -94,10 +95,8 @@ const RegisterScreen = props => {
       <ScrollView>
         <View style={styles.verify_body}>
           <View style={styles.verify_h_padding}>
-            <Image
-              style={styles.verify_img}
-              source={require('../../../../asset/image/verify.png')}
-            />
+          <LottieView style={styles.verify_img} source={require('../../../../asset/lottie/send_mail.json')} autoPlay loop />
+
             <View style={{ marginTop: 20 }}>
               <Text style={styles.verify_title}>
                 {getLanguage().register.check_email}

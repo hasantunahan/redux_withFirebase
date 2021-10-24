@@ -38,7 +38,7 @@ export const LoginStyle = (color) =>
       alignItems: 'center',
       marginVertical: 12,
       backgroundColor: color.primary,
-      padding: 8,
+      padding: 10,
       borderRadius: 3,
     },
     google: {
@@ -53,6 +53,9 @@ export const LoginStyle = (color) =>
       alignItems: 'center',
       width: '100%',
       justifyContent: 'center',
+    },
+    margin_r: {
+      marginRight: 12
     },
     overlay_main: {
       backgroundColor: color.background
@@ -69,10 +72,11 @@ export const LoginStyle = (color) =>
     },
     overlay_bigIcon: {
       alignSelf: 'center',
-      width: 80,
-      height: 80,
-      marginVertical: 12,
-      resizeMode: 'contain'
+      width: 110,
+      height: 110
+    },
+    margin_vertical_12: {
+      marginVertical: 12
     },
     overlay_title: {
       marginBottom: 12,
@@ -117,20 +121,20 @@ export const LoginStyle = (color) =>
       marginVertical: 12,
       backgroundColor: color.change,
       padding: 8,
-      borderRadius: 3,
+      borderRadius: 3
     },
     google_ico: {
-      width: 20,
-      height: 20,
+      width: 25,
+      height: 25,
       marginLeft: 10
     },
     google_text: {
       color: color.text,
       marginLeft: 10
     },
-    eye :{
-      position: 'absolute', 
-      right: 10, 
-      bottom: 13 
-    }, 
+    eye: {
+      position: 'absolute',
+      right: 10,
+      bottom: 13
+    },
   });

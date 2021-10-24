@@ -28,6 +28,7 @@ import { emailLogin, forgotPasswordEmail } from '../register/manager/email_sign_
 import { Icon, Overlay, Text } from 'react-native-elements';
 import { tr_label } from '../../../core/init/lang/tr-Tr';
 import { getLanguage } from '../../../core/extension/lang';
+import LottieView from 'lottie-react-native'
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -168,10 +169,9 @@ const LoginScreen = props => {
         activeScale={APPLICATION_CONSTANT.SCALE}
         onPress={async () => await signGoogle()}>
         <View style={styles.textwithimage}>
-          <Image
-            style={styles.google_ico}
-            source={require('../../../../asset/image/google.png')}
-          />
+          <View style={styles.margin_r}>
+            <LottieView style={styles.google_ico} source={require('../../../../asset/lottie/google.json')} autoPlay loop />
+          </View>
           <Text style={styles.google_text}>
             {getLanguage().button.google}
           </Text>
@@ -218,10 +218,8 @@ const LoginScreen = props => {
   function renderForgotModal() {
     return <View style={styles.overlay_back}>
       <ScrollView>
-        <View>
-          <Image
-            style={styles.overlay_bigIcon}
-            source={require('../../../../asset/image/lock.png')} />
+        <View style={styles.margin_vertical_12}>
+          <LottieView style={styles.overlay_bigIcon} source={require('../../../../asset/lottie/lock.json')} autoPlay loop />
         </View>
         <Text h3 style={styles.overlay_title}>{getLanguage().login.reset_password}</Text>
         <TextInput
