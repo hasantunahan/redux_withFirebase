@@ -95,7 +95,7 @@ const RegisterScreen = props => {
       <ScrollView>
         <View style={styles.verify_body}>
           <View style={styles.verify_h_padding}>
-          <LottieView style={styles.verify_img} source={require('../../../../asset/lottie/send_mail.json')} autoPlay loop />
+            <LottieView style={styles.verify_img} source={require('../../../../asset/lottie/send_mail.json')} autoPlay loop />
 
             <View style={{ marginTop: 20 }}>
               <Text style={styles.verify_title}>
@@ -126,7 +126,9 @@ const RegisterScreen = props => {
                 </Text>
                 <TouchableOpacity
                   onPress={async () => {
-                    navigation.navigate('Login'),
+                    navigation.reset({
+                      routes: [{ name: 'Login' }]
+                    }),
                       await sharedPref(CacheEnum.Remove, CacheList.registerInfo),
                       auth().currentUser.delete();
                   }}>

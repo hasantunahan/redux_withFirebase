@@ -7,6 +7,7 @@ import ThemeProvider from '../../../core/init/theme/theme_provider';
 import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import { sharedGetAllKey, sharedPref } from '../../../core/init/cache/cache';
 import SplashManager from './manager/splashmanager';
+import { StackActions } from '@react-navigation/native';
 
 const SplashView = props => {
   const manage = SplashManager()
@@ -69,7 +70,9 @@ const SplashView = props => {
   function goPage(page, args) {
     setOpen(true);
     setTimeout(() => {
-      navigation.navigate(page, args);
+      navigation.dispatch(
+        StackActions.replace(page,args)
+      );
     }, 1500);
   }
 };

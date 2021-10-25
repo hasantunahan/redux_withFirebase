@@ -51,7 +51,6 @@ export async function emailLogin(email, password, res, err,warning) {
   await auth()
     .signInWithEmailAndPassword(email, password)
     .then((response) => {
-      console.log(response);
       if(response.user.emailVerified){
         res(getLanguage().login.success);
         sharedPref(CacheEnum.Merge, CacheList.registerInfo, {

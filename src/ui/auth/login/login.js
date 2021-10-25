@@ -29,6 +29,7 @@ import { Icon, Overlay, Text } from 'react-native-elements';
 import { tr_label } from '../../../core/init/lang/tr-Tr';
 import { getLanguage } from '../../../core/extension/lang';
 import LottieView from 'lottie-react-native'
+import { StackActions } from '@react-navigation/native';
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -139,7 +140,7 @@ const LoginScreen = props => {
       <View style={styles.signup_view}>
         <Text style={styles.sign_up_prefix}>{getLanguage().login.dont_have_account}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Register', {
+          onPress={() => navigation.navigate('Register',{
             email: '',
             type: 0
           })}
@@ -249,12 +250,14 @@ const LoginScreen = props => {
       password != ''
     ) {
       emailLogin(email, password, res => {
+        clearText(),
         messageBar(colors.success, res),
           setTimeout(() => {
-            navigation.navigate('Test')
+            navigation.dispatch(
+              StackActions.replace('Test')
+            )
           }, 250),
           setLoading(false)
-        clearText()
       }, err => {
         messageBar(colors.error, err),
           setLoading(false)
@@ -306,9 +309,11 @@ const LoginScreen = props => {
     await onGoogleButtonPress().then(async val => {
       if (val.error == null) {
         setLoading(false);
-        await sharedPref(CacheEnum.Set, CacheList.user, val);
-        navigation.navigate('Test');
         clearText()
+        await sharedPref(CacheEnum.Set, CacheList.user, val);
+        navigation.dispatch(
+          StackActions.replace('Test')
+        )
       } else {
         setLoading(false);
         messageBar(colors.warning, getLanguage().login.auth_error.login_canceled);

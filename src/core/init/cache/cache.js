@@ -18,7 +18,6 @@ export async function sharedPref(method, key, val) {
       return {err: e};
     }
   } else if (method == CacheEnum.Remove) {
-    console.log('remove');
     try {
       await AsyncStorage.removeItem(key);
       return {err: null};

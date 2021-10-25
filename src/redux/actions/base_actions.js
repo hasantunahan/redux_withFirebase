@@ -5,7 +5,6 @@ export const setUser = (user) => dispatch => {
 }
 
 export const changeTheme = (theme) => dispatch => {
-    console.log('Değistir :' + JSON.stringify(theme));
     dispatch({ type: Caselist.theme, payload: theme });
 }
 
