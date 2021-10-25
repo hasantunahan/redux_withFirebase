@@ -26,6 +26,7 @@ import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import { avatarList } from './avatarlist/avatar_list';
 import { getLanguage } from '../../../core/extension/lang';
 import LottieView from 'lottie-react-native'
+import { getWidth } from '../../../core/extension/dimension';
 
 const RegisterScreen = props => {
   const { params } = props.route;
@@ -172,9 +173,13 @@ const RegisterScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={styles.logo}>
+      <View style={{ alignItems:'center',marginTop: 12 }}>
+      <Image style={{ width: getWidth(), position: 'absolute', opacity: props.theme.dark ? 0.2 : 1 }} source={require('../../../../asset/image/back.png')} />
+      <View style={styles.logo_view}>
         <AppLogo isDark={props.theme.dark} />
       </View>
+    </View>
+
     );
   }
 

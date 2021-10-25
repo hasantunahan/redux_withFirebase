@@ -30,6 +30,7 @@ import { tr_label } from '../../../core/init/lang/tr-Tr';
 import { getLanguage } from '../../../core/extension/lang';
 import LottieView from 'lottie-react-native'
 import { StackActions } from '@react-navigation/native';
+import { getWidth } from '../../../core/extension/dimension';
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -140,7 +141,7 @@ const LoginScreen = props => {
       <View style={styles.signup_view}>
         <Text style={styles.sign_up_prefix}>{getLanguage().login.dont_have_account}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Register',{
+          onPress={() => navigation.navigate('Register', {
             email: '',
             type: 0
           })}
@@ -193,9 +194,13 @@ const LoginScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={styles.logo_view}>
-        <AppLogo isDark={props.theme.dark} />
+      <View>
+        <Image style={{ width: getWidth(), position: 'absolute', opacity: props.theme.dark ? 0.2 : 1 }} source={require('../../../../asset/image/back.png')} />
+        <View style={styles.logo_view}>
+          <AppLogo isDark={props.theme.dark} />
+        </View>
       </View>
+
     );
   }
 
@@ -251,7 +256,7 @@ const LoginScreen = props => {
     ) {
       emailLogin(email, password, res => {
         clearText(),
-        messageBar(colors.success, res),
+          messageBar(colors.success, res),
           setTimeout(() => {
             navigation.dispatch(
               StackActions.replace('Test')

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Image } from 'react-native';
-const AppLogo = ({ isDark, width = 120, height = 50 }) => {
+const AppLogo = ({ isDark, width = 90, height = 130 }) => {
     return (
         <View>
             {isDark ? (

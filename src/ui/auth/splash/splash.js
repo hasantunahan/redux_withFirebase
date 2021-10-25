@@ -34,21 +34,19 @@ const SplashView = props => {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {props.theme.dark ? (
           <Image
-            style={{ width: 100, height: 40 }}
+            style={{ width: 90, height: 130,resizeMode :'contain' }}
             source={require('../../../../asset/image/logo_dark.png')}
           />
         ) : (
           <Image
-            style={{ width: 100, height: 40 }}
+            style={{ width: 90, height: 130 ,resizeMode :'contain'}}
             source={require('../../../../asset/image/logo_light.png')}
           />
         )}
         {open && (
-          <View style={{ marginTop: 15 }}>
             <Text style={{ color: colors.text, marginTop: 15 }}>
               {props.language.loading}
             </Text>
-          </View>
         )}
       </View>
     );
