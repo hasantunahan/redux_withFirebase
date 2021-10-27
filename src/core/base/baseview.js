@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import AppBar from '../../ui/_partial/header/appbar';
 import store from '../../redux/store/store';
 import {Caselist} from '../../redux/_caselist/caselist';
+import BottomBar from '../../ui/_partial/bottom/bottombar';
 
 const BaseView = ({
   screen,
@@ -16,6 +17,11 @@ const BaseView = ({
   headerElevation = defProps.elevation,
   headerText,
   headerActions,
+  hiddenBottom = defProps.hiddenBottom,
+  bottomBackgroundColor,
+  bottomData,
+  bottomColor,
+  callScreen,
 }) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: statusColor}}>
@@ -33,6 +39,14 @@ const BaseView = ({
           />
         )}
         {screen}
+        {!hiddenBottom && (
+          <BottomBar
+            data={bottomData}
+            backgroundColor={bottomBackgroundColor}
+            color={bottomColor}
+            call={callScreen}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -44,6 +58,7 @@ BaseView.propTypes = {
   headerHidden: PropTypes.bool,
   barStyle: PropTypes.string,
   isBack: PropTypes.bool,
+  hiddenBottom: PropTypes.bool,
 };
 
 const defProps = {
@@ -53,6 +68,7 @@ const defProps = {
   barStyle: 'dark-content',
   isBack: true,
   elevation: 0,
+  hiddenBottom: true,
 };
 
 export default BaseView;
