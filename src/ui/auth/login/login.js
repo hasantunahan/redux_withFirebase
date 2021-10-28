@@ -5,7 +5,7 @@ import {
   Image,
   ScrollView,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import BaseView from '../../../core/base/baseview';
@@ -31,6 +31,7 @@ import { getLanguage } from '../../../core/extension/lang';
 import LottieView from 'lottie-react-native'
 import { StackActions } from '@react-navigation/native';
 import { getWidth } from '../../../core/extension/dimension';
+
 
 const LoginScreen = props => {
   const [snackbar, setSnackbar] = React.useState({
@@ -259,7 +260,7 @@ const LoginScreen = props => {
           messageBar(colors.success, res),
           setTimeout(() => {
             navigation.dispatch(
-              StackActions.replace('Test')
+              StackActions.replace('HomeNavigation')
             )
           }, 250),
           setLoading(false)
@@ -317,7 +318,7 @@ const LoginScreen = props => {
         clearText()
         await sharedPref(CacheEnum.Set, CacheList.user, val);
         navigation.dispatch(
-          StackActions.replace('Test')
+          StackActions.replace('HomeNavigation')
         )
       } else {
         setLoading(false);

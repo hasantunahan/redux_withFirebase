@@ -60,9 +60,9 @@ const Tests = props => {
       statusColor={'blue'}
       hiddenBottom={false}
       bottomData={Bottomlist}
-      bottomBackgroundColor={props.theme.colors.card}
+      bottomBackgroundColor={props.theme.colors.change}
       backgroundColor={props.theme.colors.background}
-      bottomColor={props.theme.colors.background.text}
+      bottomColor={props.theme.colors.text}
       callScreen={data => setScreen(data)}
       screen={
         <View style={{flex: 1}}>

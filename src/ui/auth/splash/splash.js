@@ -60,7 +60,7 @@ const SplashView = props => {
       if (!data.emailVerified) {
         goPage('Register', { email: data.user.email, type: 1 });
       } else {
-        goPage('Test');
+        goPage('HomeNavigation');
       }
     }
   }

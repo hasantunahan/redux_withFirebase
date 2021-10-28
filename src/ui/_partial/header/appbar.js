@@ -26,7 +26,7 @@ const AppBar = ({
       {leading}
       <Appbar.Content
         color={color}
-        title={text ?? APPLICATION_CONSTANT.APP_NAME}
+        title={text}
       />
       {actionList.length > 0 &&
         actionList.map(item => {

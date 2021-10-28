@@ -52,7 +52,7 @@ const RegisterScreen = props => {
   React.useEffect(() => {
     control().then(() => {
       if (verify) {
-        navigation.navigate('Test');
+        navigation.navigate('HomeNavigation');
       } else {
         console.log("not login yet");
       }

@@ -19,9 +19,12 @@ const BaseView = ({
   headerActions,
   hiddenBottom = defProps.hiddenBottom,
   bottomBackgroundColor,
+  leading,
   bottomData,
   bottomColor,
   callScreen,
+  headerColor,
+  selectscreen
 }) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: statusColor}}>
@@ -30,12 +33,13 @@ const BaseView = ({
         {!headerHidden && (
           <AppBar
             isBack={isBack}
-            color={'white'}
-            text={headerText}
+            color={headerColor ?? 'white'}
+            text={headerText ?? ''}
             backgroundColor={statusColor}
             backPress={() => console.log('back')}
             elevation={headerElevation}
             actionList={headerActions}
+            leading={leading}
           />
         )}
         {screen}
@@ -45,6 +49,7 @@ const BaseView = ({
             backgroundColor={bottomBackgroundColor}
             color={bottomColor}
             call={callScreen}
+            selectscreen={selectscreen}
           />
         )}
       </View>

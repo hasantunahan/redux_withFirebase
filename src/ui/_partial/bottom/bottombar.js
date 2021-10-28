@@ -6,37 +6,55 @@ import {
   Animated,
   Touchable,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const BottomBar = ({backgroundColor, data, color, call}) => {
+
+const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
   const [select, setSelect] = React.useState(1);
   React.useEffect(() => {
-    call(select);
+      call(select);
   }, [select]);
+  console.log('Selected' + select);
+
+  function handleBackButtonClick() {
+    if (select == 1) {
+      
+    }else{
+      setSelect(1)
+    }
+    console.log('geldi babbba');
+    return true;
+  }
+
+  React.useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, [select]);
+
+
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
-  const Tabs = ({isfocused, text, icon, onPress}) => {
+  const Tabs = ({isfocused, text, icon, onPress,focus}) => {
     return (
-      <Animated.View style={{width: '25%'}}>
+      <Animated.View style={{width: '20%'}}>
         <TouchableOpacity
           onPress={() => onPress()}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             paddingVertical: 8,
-            backgroundColor: isfocused && '#FF6060',
             borderRadius: 8,
             justifyContent: 'center',
             opacity: fadeAnim,
           }}>
-          <Ionicons color={isfocused ? 'white' : color} name={icon} size={20} />
-          {isfocused && (
-            <Text
-              style={{marginHorizontal: 4, color: isfocused ? 'white' : color}}>
-              {text}
-            </Text>
-          )}
+          <Ionicons color={color} name={isfocused ? focus : icon} size={24} />
         </TouchableOpacity>
       </Animated.View>
     );
@@ -74,6 +92,7 @@ const BottomBar = ({backgroundColor, data, color, call}) => {
               key={index}
               text={item.text}
               icon={item.icon}
+              focus={item.iconfocus}
             />
           );
         })}

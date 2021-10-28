@@ -2,7 +2,7 @@ export const lightTheme = {
     dark: false,
     colors: {
         primary: '#FF9292',
-        background: '#F5F5F5',
+        background: '#FFFFFF',
         card: '#EDEDED',
         text: '#3D3D3D',
         border: '#7E7E7E',
