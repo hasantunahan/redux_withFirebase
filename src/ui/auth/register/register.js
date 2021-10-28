@@ -173,12 +173,12 @@ const RegisterScreen = props => {
 
   function renderLogo() {
     return (
-      <View style={{ alignItems:'center',marginTop: 12 }}>
-      <Image style={{ width: getWidth(), position: 'absolute', opacity: props.theme.dark ? 0.2 : 1 }} source={require('../../../../asset/image/back.png')} />
-      <View style={styles.logo_view}>
-        <AppLogo isDark={props.theme.dark} />
+      <View style={{ alignItems: 'center', marginTop: 12 }}>
+        <Image style={{ width: getWidth(), position: 'absolute', opacity: props.theme.dark ? 0.2 : 1 }} source={require('../../../../asset/image/back.png')} />
+        <View style={styles.logo_view}>
+          <AppLogo isDark={props.theme.dark} />
+        </View>
       </View>
-    </View>
 
     );
   }

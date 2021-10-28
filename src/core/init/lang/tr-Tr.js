@@ -3,7 +3,8 @@ export const tr_label = {
         login: 'Giriş',
         signup: 'Kayıt ol',
         google: 'Google ile giriş',
-        confirm: 'Onayla'
+        confirm: 'Onayla',
+        without  :'Üye olmadan devam et'
     },
     or: 'ya da',
     auth_create: {

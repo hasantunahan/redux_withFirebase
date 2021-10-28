@@ -119,8 +119,14 @@ export const LoginStyle = (color) =>
     google_button: {
       alignItems: 'center',
       marginVertical: 12,
-      backgroundColor: color.change,
+      backgroundColor: color.card,
       padding: 8,
+      borderRadius: 3
+    },
+    without_button: {
+      alignItems: 'center',
+      backgroundColor: color.card,
+      padding: 10,
       borderRadius: 3
     },
     google_ico: {

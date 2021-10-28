@@ -18,9 +18,9 @@ export const Bottomlist = [
   {
     id: 3,
     page: '',
-    icon: 'search-outline',
-    iconfocus: 'search-sharp',
-    text: 'Search',
+    icon: 'add-circle-outline',
+    iconfocus: 'add-circle',
+    text: 'Add',
     header: true,
   },
   {

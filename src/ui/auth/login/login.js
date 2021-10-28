@@ -82,6 +82,7 @@ const LoginScreen = props => {
             {renderLoginButton()}
             <DividerWithText text={getLanguage().or} />
             {renderGoogleButton()}
+            {renderWithoutButton()}
             {renderAccountGoSignUp()}
             {renderLoadingBottom()}
             {renderOverlay()}
@@ -177,6 +178,20 @@ const LoginScreen = props => {
           </View>
           <Text style={styles.google_text}>
             {getLanguage().button.google}
+          </Text>
+        </View>
+      </TouchableScale>
+    );
+  }
+
+  function renderWithoutButton() {
+    return (
+      <TouchableScale style={styles.without_button}
+        activeScale={APPLICATION_CONSTANT.SCALE}
+        onPress={async () => console.log('without')}>
+        <View style={styles.textwithimage}>
+          <Text style={styles.google_text}>
+            {getLanguage().button.without}
           </Text>
         </View>
       </TouchableScale>

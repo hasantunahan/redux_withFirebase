@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, SafeAreaView, StatusBar} from 'react-native';
-import {BaseStyle} from './style/base.style';
+import { View, Text, SafeAreaView, StatusBar } from 'react-native';
+import { BaseStyle } from './style/base.style';
 import PropTypes from 'prop-types';
 import AppBar from '../../ui/_partial/header/appbar';
 import store from '../../redux/store/store';
-import {Caselist} from '../../redux/_caselist/caselist';
+import { Caselist } from '../../redux/_caselist/caselist';
 import BottomBar from '../../ui/_partial/bottom/bottombar';
 
 const BaseView = ({
@@ -27,9 +27,9 @@ const BaseView = ({
   selectscreen
 }) => {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: statusColor}}>
-      <View style={{flex: 1, backgroundColor: backgroundColor}}>
-        <StatusBar barStyle={barStyle} backgroundColor={statusColor} />
+    <SafeAreaView  style={{ flex: 1, backgroundColor: statusColor }}>
+      <View style={{ flex: 1, backgroundColor: backgroundColor }}>
+        <StatusBar tr barStyle={barStyle} backgroundColor={statusColor} />
         {!headerHidden && (
           <AppBar
             isBack={isBack}
@@ -39,7 +39,6 @@ const BaseView = ({
             backPress={() => console.log('back')}
             elevation={headerElevation}
             actionList={headerActions}
-            leading={leading}
           />
         )}
         {screen}

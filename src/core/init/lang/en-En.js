@@ -3,7 +3,8 @@ export const en_label = {
         login : 'Login',
         signup : 'Sign Up',
         google :'Sign in with Google',
-        confirm :'Confirm'
+        confirm :'Confirm',
+        without :'Continue without a member'
     },
     or :'or',
     auth_create :{

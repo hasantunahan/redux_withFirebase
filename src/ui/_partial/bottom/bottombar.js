@@ -9,9 +9,11 @@ import {
   BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native'
 
 
 const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
+  const navigation = useNavigation()
   const [select, setSelect] = React.useState(1);
   React.useEffect(() => {
       call(select);
@@ -20,11 +22,10 @@ const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
 
   function handleBackButtonClick() {
     if (select == 1) {
-      
+      BackHandler.exitApp()
     }else{
       setSelect(1)
     }
-    console.log('geldi babbba');
     return true;
   }
 

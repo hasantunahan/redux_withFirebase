@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, Platform} from 'react-native';
-import {Appbar} from 'react-native-paper';
+import { View, Text, Platform } from 'react-native';
+import { Appbar } from 'react-native-paper';
 import PropTypes from 'prop-types';
-import {APPLICATION_CONSTANT} from '../../../core/constant/app/applicationconstant';
+import { APPLICATION_CONSTANT } from '../../../core/constant/app/applicationconstant';
 
 const AppBar = ({
   backgroundColor = 'white',
@@ -19,7 +19,7 @@ const AppBar = ({
 
   return (
     <Appbar.Header
-      style={{backgroundColor: backgroundColor, elevation: elevation}}>
+      style={{ backgroundColor: backgroundColor, elevation: elevation, borderBottomWidth:0.2, borderBottomColor: color}}>
       {isBack && (
         <Appbar.BackAction color={color} onPress={() => backPress()} />
       )}
