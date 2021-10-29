@@ -11,17 +11,29 @@ import ThemeProvider from '../../../../core/init/theme/theme_provider';
 import { HomeStyle } from './style/style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/core';
+import { Modalize } from 'react-native-modalize';
 
 const HomeView = (props) => {
   const colors = ThemeProvider(props.theme.colors)
   const styles = HomeStyle(colors)
   const navigation = useNavigation()
-
+  const modalizeRef = useRef(null);
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
 
   return (
     <View style={styles.main}>
       <AppBar backgroundColor={colors.background} isBack={false} color={colors.text} leading={leading()} />
       {renderBody()}
+      <Modalize ref={modalizeRef} scrollViewProps={{ showsVerticalScrollIndicator: false }}
+        snapPoint={300}
+        HeaderComponent={
+          <View>
+            <Text>Header</Text>
+          </View>
+        }
+        withHandle={false}><Text>hello</Text></Modalize>
     </View>
   );
 
@@ -37,7 +49,7 @@ const HomeView = (props) => {
   function leading() {
     return <View style={styles.header_main}>
       <Image style={styles.header_logo} source={require('../../../../../asset/image/logo_dark.png')} />
-      <TouchableOpacity onPress={() => console.log("hee")}>
+      <TouchableOpacity onPress={onOpen}>
         <Ionicons
           style={styles.icon}
           color={colors.text}
