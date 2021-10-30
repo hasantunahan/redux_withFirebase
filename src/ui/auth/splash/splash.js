@@ -12,7 +12,6 @@ import { StackActions } from '@react-navigation/native';
 const SplashView = props => {
   const manage = SplashManager()
   const navigation = useNavigation();
-  const [open, setOpen] = React.useState(true);
   const colors = ThemeProvider(props.theme.colors);
 
   React.useEffect(() => {
@@ -43,11 +42,6 @@ const SplashView = props => {
             source={require('../../../../asset/image/logo_light.png')}
           />
         )}
-        {open && (
-            <Text style={{ color: colors.text, marginTop: 15 }}>
-              {props.language.loading}
-            </Text>
-        )}
       </View>
     );
   }
@@ -66,7 +60,6 @@ const SplashView = props => {
   }
 
   function goPage(page, args) {
-    setOpen(true);
     setTimeout(() => {
       navigation.dispatch(
         StackActions.replace(page,args)

@@ -11,7 +11,8 @@ export const lightTheme = {
         error : '#CF3640',
         success :'#37A568',
         warning :'#F0943E',
-        info : '#70CDEC'
+        info : '#4DCDEC',
+        transparent :'1A080808'
     },
     statusbar: 'dark-content'
 };
@@ -21,7 +22,7 @@ export const darkTheme = {
     colors: {
         primary: '#FF6060',
         background: '#080808',
-        card: '#444444',
+        card: '#141414',
         text: '#FFFFFF',
         border: '#EDEDED',
         notification: '#9E234C',
@@ -29,7 +30,8 @@ export const darkTheme = {
         error : '#CF3640',
         success :'#37A568',
         warning :'#F0943E',
-        info : '#70CDEC'
+        info : '#70CDEC',
+        transparent :'4D080808'
     },
     statusbar: 'light-content'
 };

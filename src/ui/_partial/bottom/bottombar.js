@@ -1,30 +1,20 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Touchable,
-  TouchableOpacity,
-  BackHandler,
-} from 'react-native';
+import {View, StyleSheet, Animated, BackHandler} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native'
+import TouchableScale from 'react-native-touchable-scale';
+import {APPLICATION_CONSTANT} from '../../../core/constant/app/applicationconstant';
 
-
-const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
-  const navigation = useNavigation()
+const BottomBar = ({backgroundColor, data, color, call}) => {
   const [select, setSelect] = React.useState(1);
   React.useEffect(() => {
-      call(select);
+    call(select);
   }, [select]);
-  console.log('Selected' + select);
 
   function handleBackButtonClick() {
     if (select == 1) {
-      BackHandler.exitApp()
-    }else{
-      setSelect(1)
+      BackHandler.exitApp();
+    } else {
+      setSelect(1);
     }
     return true;
   }
@@ -39,13 +29,11 @@ const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
     };
   }, [select]);
 
-
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
-
-  const Tabs = ({isfocused, text, icon, onPress,focus}) => {
+  const Tabs = ({isfocused, text, icon, onPress, focus}) => {
     return (
-      <Animated.View style={{width: '20%'}}>
-        <TouchableOpacity
+      <View style={{width: '20%'}}>
+        <TouchableScale
+          activeScale={APPLICATION_CONSTANT.SCALE}
           onPress={() => onPress()}
           style={{
             flexDirection: 'row',
@@ -53,11 +41,14 @@ const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
             paddingVertical: 8,
             borderRadius: 8,
             justifyContent: 'center',
-            opacity: fadeAnim,
           }}>
-          <Ionicons color={color} name={isfocused ? focus : icon} size={24} />
-        </TouchableOpacity>
-      </Animated.View>
+          <Ionicons
+            color={isfocused ? '#FF6060' : color}
+            name={isfocused ? focus : icon}
+            size={24}
+          />
+        </TouchableScale>
+      </View>
     );
   };
 
@@ -82,12 +73,7 @@ const BottomBar = ({backgroundColor, data, color, call,selectscreen}) => {
           return (
             <Tabs
               onPress={() => {
-                setSelect(item.id),
-                  Animated.timing(fadeAnim, {
-                    toValue: 1,
-                    useNativeDriver: true,
-                    duration: 200,
-                  }).start();
+                setSelect(item.id);
               }}
               isfocused={item.id == select ? true : false}
               key={index}
@@ -110,7 +96,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopWidth: 0.2,
     left: 0,
-    zIndex: 99999,
+    zIndex: 9997,
   },
 });
 export default BottomBar;
