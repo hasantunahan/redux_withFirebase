@@ -4,10 +4,10 @@ import HomeView from '../../home/home/home';
 import ProfileView from '../../home/profil/profil';
 import RecipeView from '../../home/receipe/receipe';
 import AddRecipeView from '../../home/add_recipe/addrecipe';
-export function getScreen(screen) {
+export function getScreen(screen,bar) {
   switch (screen) {
     case 1:
-      return <HomeView />;
+      return <HomeView bar={(res)=> bar(res)} />;
     case 2:
       return <RecipeView />;
     case 3:

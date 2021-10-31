@@ -1,9 +1,11 @@
 import React from 'react';
-import {Modalize} from 'react-native-modalize';
-import {View, Text} from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { View, Text } from 'react-native';
 
 const CustomBottomSheet = React.forwardRef((props, ref) => (
   <Modalize
+    onOpen={() => props.handle(true)}
+    onClose={() => props.handle(false)}
     ref={ref}
     modalStyle={{
       backgroundColor: props.colors.card,
@@ -22,10 +24,10 @@ const CustomBottomSheet = React.forwardRef((props, ref) => (
       backgroundColor: 'rgba(0, 0, 0, 0.1)',
     }}
     useNativeDriver={true}
-    scrollViewProps={{showsVerticalScrollIndicator: false}}
+    scrollViewProps={{ showsVerticalScrollIndicator: false }}
     snapPoint={props.size}
     HeaderComponent={
-      <View style={{width: '100%'}}>
+      <View style={{ width: '100%' }}>
         <View
           style={{
             width: 50,

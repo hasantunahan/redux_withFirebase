@@ -8,13 +8,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/core';
 import CustomBottomSheet from '../../../_partial/bottomsheet/bottomsheet';
 import MenuBottomSheet from '../../../settings/menu/menu_bottom';
+import { set } from 'react-native-reanimated';
 
 const HomeView = props => {
+  const [bar,setBar] = React.useState(false)
   const colors = ThemeProvider(props.theme.colors);
   const styles = HomeStyle(colors);
   const navigation = useNavigation();
   const modalizeRef = React.createRef(null);
   console.log(colors);
+  React.useEffect(()=>{
+    props.bar(bar)
+  },[modalizeRef])
+
   return (
     <View style={styles.main}>
       <AppBar
@@ -26,6 +32,7 @@ const HomeView = props => {
       {renderBody()}
       <CustomBottomSheet
         colors={colors}
+        handle={(res)=>setBar(res)}
         size={350}
         items={<MenuBottomSheet colors={colors} />}
         ref={modalizeRef}

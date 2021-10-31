@@ -1,13 +1,13 @@
 import React from 'react';
-import {BackHandler, Keyboard} from 'react-native';
-import {connect} from 'react-redux';
+import { BackHandler, Keyboard } from 'react-native';
+import { connect } from 'react-redux';
 import BaseView from '../../../core/base/baseview';
-import {Bottomlist} from '../../../core/constant/bottom/bottombar';
-import {getHeader, getScreen} from './manage/homenavmanager';
+import { Bottomlist } from '../../../core/constant/bottom/bottombar';
+import { getHeader, getScreen } from './manage/homenavmanager';
 
 const HomeNavigation = props => {
   const [screen, setScreen] = React.useState(1);
-  const [bottom ,setBottom ] = React.useState(false)
+  const [bottom, setBottom] = React.useState(false)
 
   React.useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -43,7 +43,7 @@ const HomeNavigation = props => {
       bottomColor={props.theme.colors.text}
       callScreen={data => setScreen(data)}
       selectscreen={screen}
-      screen={getScreen(screen)}
+      screen={getScreen(screen, (res) => setBottom(res))}
     />
   );
 };

@@ -49,15 +49,15 @@ const MenuBottomSheet = ({colors}) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => console.log('privacy')}>
-          {rendertextItem(getLanguage().menu_list.privacy)}
+          {rendertextItem(getLanguage().menu_list.privacy,colors)}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => console.log('terms')}>
-          {rendertextItem(getLanguage().menu_list.terms)}
+          {rendertextItem(getLanguage().menu_list.terms,colors)}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => console.log('help')}>
-          {rendertextItem(getLanguage().menu_list.help)}
+          {rendertextItem(getLanguage().menu_list.help,colors)}
         </TouchableOpacity>
 
         {rendertextItem(
@@ -144,7 +144,7 @@ const MenuBottomSheet = ({colors}) => {
   function rendertextItem(text, color) {
     return (
       <View style={{paddingHorizontal: 20}}>
-        <Text style={{color: color, fontWeight: '500', marginVertical: 6}}>
+        <Text style={{color: color.text, marginVertical: 6}}>
           {text ?? 'item'}
         </Text>
       </View>
