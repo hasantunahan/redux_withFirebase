@@ -1,24 +1,25 @@
-import {useNavigation} from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import {View, Text, Alert} from 'react-native';
-import {MenuStyle} from './style/style';
+import { View, Text, Alert } from 'react-native';
+import { MenuStyle } from './style/style';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {List} from 'react-native-paper';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {getLanguage} from '../../../core/extension/lang';
+import { List } from 'react-native-paper';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { getLanguage } from '../../../core/extension/lang';
 import {
   pushNavigation,
   pushNavigationReplacement,
 } from '../../../core/init/navigation/navigationservice';
 import DeviceInfo from 'react-native-device-info';
-import {sharedPref} from '../../../core/init/cache/cache';
-import {CacheEnum, CacheList} from '../../../core/constant/cache/cache_enum';
+import { sharedPref } from '../../../core/init/cache/cache';
+import { CacheEnum, CacheList } from '../../../core/constant/cache/cache_enum';
 import auth from '@react-native-firebase/auth';
-import {Avatar} from 'react-native-paper';
-import {signOutGoogle} from '../../auth/login/manager/google_sign';
-import {emailSignOut} from '../../auth/register/manager/email_sign_up';
+import { Avatar } from 'react-native-paper';
+import { signOutGoogle } from '../../auth/login/manager/google_sign';
+import { emailSignOut } from '../../auth/register/manager/email_sign_up';
+import TouchableScale from 'react-native-touchable-scale';
 
-const MenuBottomSheet = ({colors}) => {
+const MenuBottomSheet = ({ colors }) => {
   const navigation = useNavigation();
   const styles = MenuStyle(colors);
   const [type, setType] = React.useState('');
@@ -29,15 +30,15 @@ const MenuBottomSheet = ({colors}) => {
   return (
     <View style={styles.main}>
       <ScrollView>
-        <TouchableOpacity onPress={() => pushNavigation(navigation, 'Splash')}>
+        <TouchableScale onPress={() => pushNavigation(navigation, 'Splash')}>
           {renderMypost()}
-        </TouchableOpacity>
+        </TouchableScale>
 
-        <TouchableOpacity onPress={() => pushNavigation(navigation, 'Splash')}>
+        <TouchableScale onPress={() => pushNavigation(navigation, 'Settings')}>
           {renderSetting()}
-        </TouchableOpacity>
+        </TouchableScale>
 
-        <TouchableOpacity
+        <TouchableScale
           onPress={() =>
             getAlert(
               getLanguage().alert_logout.logout,
@@ -46,19 +47,19 @@ const MenuBottomSheet = ({colors}) => {
             )
           }>
           {renderLogout()}
-        </TouchableOpacity>
+        </TouchableScale>
 
-        <TouchableOpacity onPress={() => console.log('privacy')}>
-          {rendertextItem(getLanguage().menu_list.privacy,colors)}
-        </TouchableOpacity>
+        <TouchableScale onPress={() => console.log('privacy')}>
+          {rendertextItem(getLanguage().menu_list.privacy, colors)}
+        </TouchableScale>
 
-        <TouchableOpacity onPress={() => console.log('terms')}>
-          {rendertextItem(getLanguage().menu_list.terms,colors)}
-        </TouchableOpacity>
+        <TouchableScale onPress={() => console.log('terms')}>
+          {rendertextItem(getLanguage().menu_list.terms, colors)}
+        </TouchableScale>
 
-        <TouchableOpacity onPress={() => console.log('help')}>
-          {rendertextItem(getLanguage().menu_list.help,colors)}
-        </TouchableOpacity>
+        <TouchableScale onPress={() => console.log('help')}>
+          {rendertextItem(getLanguage().menu_list.help, colors)}
+        </TouchableScale>
 
         {rendertextItem(
           `${getLanguage().menu_list.version} : ${DeviceInfo.getVersion()}`,
@@ -133,7 +134,16 @@ const MenuBottomSheet = ({colors}) => {
           <View style={styles.menu_left_view}>
             <Avatar.Image
               size={30}
-              source={{uri: auth().currentUser.photoURL}}
+              source={{ uri: auth().currentUser.photoURL }}
+            />
+          </View>
+        )}
+        right={() => (
+          <View style={styles.menu_right_view}>
+            <Ionicons
+              color={colors.text}
+              name="chevron-forward-sharp"
+              size={18}
             />
           </View>
         )}
@@ -143,8 +153,8 @@ const MenuBottomSheet = ({colors}) => {
 
   function rendertextItem(text, color) {
     return (
-      <View style={{paddingHorizontal: 20}}>
-        <Text style={{color: color.text, marginVertical: 6}}>
+      <View style={{ paddingHorizontal: 20 }}>
+        <Text style={{ color: color.text, marginVertical: 6 }}>
           {text ?? 'item'}
         </Text>
       </View>

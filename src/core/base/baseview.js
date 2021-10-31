@@ -24,6 +24,7 @@ const BaseView = ({
   bottomColor,
   callScreen,
   headerColor,
+  backPress,
   selectscreen
 }) => {
   return (
@@ -36,7 +37,7 @@ const BaseView = ({
             color={headerColor ?? 'white'}
             text={headerText ?? ''}
             backgroundColor={statusColor}
-            backPress={() => console.log('back')}
+            backPress={() => backPress()}
             elevation={headerElevation}
             actionList={headerActions}
           />

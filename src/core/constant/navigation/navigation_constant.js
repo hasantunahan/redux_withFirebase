@@ -3,6 +3,7 @@ import RegisterScreen from '../../../ui/auth/register/register';
 import Tests from '../../../ui/test/tests';
 import SplashView from '../../../ui/auth/splash/splash';
 import Homenavigation from '../../../ui/features/home_navigation/homenavigation';
+import SettingView from '../../../ui/settings/settings/settings';
 
 export var NavigationList = [
   {
@@ -20,6 +21,10 @@ export var NavigationList = [
   {
     page: Homenavigation,
     name: 'HomeNavigation',
+  },
+  {
+    page: SettingView,
+    name: 'Settings',
   },
   {
     page: Tests,

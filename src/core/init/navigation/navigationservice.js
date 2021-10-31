@@ -15,6 +15,3 @@ export function goBack(nav, name, args) {
   nav.goBack()
 }
 
-export function pushNavigationWithReset(){
-  
-}
